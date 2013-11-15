@@ -1,0 +1,490 @@
+html,body{background-color:#131313;
+                 width:100%;
+                 height:100%;
+}
+
+body {
+        margin:0;
+        padding:0;
+        -webkit-text-rendering:optimizeLegibility;
+        -webkit-margin-before:0em;
+        -webkit-margin-after:0em;
+        -webkit-margin-start:0;
+        -webkit-margin-end:0;
+       text-rendering :optimizeLegibility;
+       background-color:transparent;
+       font-size:10px; 
+    }
+  
+ nav, ul, li, h1,h2,h3,h4,h5,h6,article,aside,p,article {margin:0;padding:0;}
+ 
+ @font-face {
+                                    font-family: "Entypo";
+                                    src: url("../fonts/entypo.eot");
+                                    src: url("../fonts/entypo.eot?#iefix") format("embedded-opentype"), 
+                                           url("../fonts/entypo.woff") format("woff"), url("../fonts/entypo.ttf") format("truetype"),
+                                           url("../fonts/entypo.svg#entypo") format("svg");
+                                           font-weight: normal;
+                                           font-style: normal; }
+  header,nav,.banner,.badge,.badge_icon_container,
+.badge_title_container,.accordionButton { box-sizing:border-box;
+                                                                  -moz-box-sizing: border-box;}
+ /* walker was my_base */
+ a { 
+      text-decoration: none; 
+     -webkit-transition: background 0.2s ease-in;
+     -moz-transition: background 0.2s ease-in;
+     -o-transition: background 0.2s ease-in;
+     -ms-transition: background 0.2s ease-in;
+      transition: background 0.2s ease-in;
+ }
+h1 {  font-size:3.2em; }
+h2  { font-size:3.0em; }
+h3  {font-size: 1.9em;}
+h4  {font-size: 1.6em;}
+h5  {font-size: 1.4em;}
+h6  {font-size: 1.2em;}     
+  /*    WALKER NEW STUFF */
+ #splash { width:100%;height:100%;background-color:#131313;color:#f0e7ec;background:url("../img/pl-ballB.gif") center center no-repeat}  
+/* assumming base font is 10px so scale accordingly from earlier bf of 16px */
+#wrapper { width:100%;position:relative;}
+          
+.container {position:relative; max-width:1440px;width:100%; margin:0 auto; padding:0} /*walker extraneous */
+
+header {
+                position: absolute;
+                top: 0;
+                 left: 0;
+                height:100%;
+                width: 100%;
+                background-color:transparent;
+                margin:0 !important;    /*walker this blows other use of header */
+                opacity:1;
+              }
+/* utility classes */
+.darkred {color:#300a14;}
+.offwhite {color:#f0e4ec;}
+.makeinvisible { visibility:hidden;}
+.clearfix:before,
+    .clearfix:after,
+    .row:before,
+    .row:after {
+     content: '\0020';
+     display: block;
+     overflow: hidden;
+     visibility: hidden;
+     width: 0;
+     height: 0; }
+    .row:after,
+    .clearfix:after {
+    clear: both; }
+    .row,
+    .clearfix {
+     zoom: 1; }
+
+ .clear {
+      clear: both;
+      display: block;
+      overflow: hidden;
+      visibility: hidden;
+      width: 0;
+      height: 0;
+    }
+/* top in header  */
+.topbanner {  padding:0;
+                     margin:0;
+                     top:0;
+                     left:0;
+                     width:100%;
+                     height:108px;
+                     z-index: 60;
+                     position:fixed; 
+                   }
+#top-filmtitle {  
+                        position:relative;
+                        font-family:Oswald;
+                        line-height:1.2;
+                        font-style:normal;
+                        font-weight:400;
+                        width:auto;
+                        padding:10px 0 0 0;
+                        padding-left:1.5625%;
+                    }   
+.top-maintitle {font-size:3.2em;text-align:inherit;}          
+.top-subtitle   {font-weight:300;font-size:2.0em; }  
+.top-director {  position:relative;
+                        padding:12px 0 0 0;          
+                        line-height:1.6;
+                        font-size:1.6em;
+                        text-align: right;
+                     }          
+.showbg {background-image:url('../img/panoramadark.jpg');} 
+/*home navigation */
+.topbanner nav { 
+                            position:absolute;
+                            right:3%;
+                            -moz-box-sizing:border-box;
+                            box-sizing:border-box;
+                            z-index:0;
+                            width:auto;
+                            margin: 0;
+                            bottom:2px;
+                         }     
+.nav { position: relative;}    
+.topbanner nav ul:after { 
+                content: "\0020"; 
+                display: block; 
+                height: 0; 
+                clear: both; 
+                visibility: hidden;
+}
+.nav li {        cursor: pointer;
+                    display: block;
+                    float: left;
+                    margin-right: 2.0em; 
+                    font-size:1.4em;    
+                }
+.nav li:last-child{ margin-right: 0px; }
+
+.nav a {   font-family:Oswald;
+               font-weight: normal;
+               font-size:inherit;
+               padding-bottom: 2px;
+               z-index: 2;
+           }
+ .nav li.blob {        border-bottom: 3px solid #FF0000;
+                            bottom: -1px;
+                            height: 3px;
+                            padding-bottom: 0;
+                            position: absolute;
+                            z-index: 1;
+                        }
+/* home big title and background */                       
+section.banner  {
+    background-clip: border-box;
+    background-origin: border-box;
+    position: relative;
+    background-attachment: fixed;
+    top:0;
+    left:0;
+    right:0;
+ }
+ /* walker move trees image to section.banner? */
+.home, .pages {
+    background-image: url('../img/treesbgA.jpg'); 
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+     background-size: cover;
+ }
+.home {z-index:50;}
+.pages {padding-top:2px;
+             z-index:50;
+             width:100%;
+             position:relative;}
+#page-filmtitle,
+#splash-filmtitle {font-family:Oswald;
+                          text-align:center; 
+                          color:#300a14; 
+                          width:570px;          
+                          margin:0 auto;
+                          margin-top:2.0em;}
+#splash-filmtitle {color:#f0e7ec}
+.page-maintitle {  font-size:5.0em;line-height:0;}
+.page-subtitle   { font-weight:300;line-height:1.30;margin-top:1.2em;font-size:3.0em;border-bottom:1px solid #300a14;}
+.page-director  { font-family:Oswald; font-size:3.0em;line-height:1.0;margin-top:1.2em;}
+/* *********accordion button components************ */
+#ab-icon     {  background-image:url('../img/abo-thumb.png');}
+#des-icon   {  background-image:url('../img/des-thumb.png'); }
+#his-icon    {  background-image:url('../img/his-thumb.png'); } 
+#com-icon  {  background-image:url('../img/com-thumb.png'); }
+#dir-icon     {  background-image:url('../img/dir-thumb.png');} 
+#get-icon  {   background-image:url('../img/get-thumb.png');}
+.badge {margin:0;padding:0;    
+             border:solid 1px #444444;
+             position:relative;
+             background-image:url("../img/colorblur50.jpg");
+             -webkit-background-size: cover;
+             -moz-background-size: cover;
+              background-size: cover;
+             -webkit-border-radius:10px;
+             -moz-border-radius:10px;
+             border-radius:10px;
+            }   
+.badge_icon_container {float:left;
+                                       position:relative;
+                                       -webkit-border-top-left-radius:10px;
+                                      -moz-border-top-left-radius:10px;
+                                      border-top-left-radius:10px;
+                                     -webkit-border-bottom-left-radius:10px;
+                                     -moz-border-bottom-left-radius:10px;
+                                      border-bottom-left-radius:10px;
+                                      height:77px;
+                                      width:100px;
+                                      border-right:#999999 2px solid;
+                                      border-bottom:#444444 1px solid;}
+.badge_title_container { 
+                                      left:101px;
+                                      position:relative;
+                                      height:75px;
+                                      width:200px;
+                                      border-left:#111111 1px solid;
+                                    }
+ .badge_title {position:absolute;
+                      bottom:39px; 
+                      right:25px;
+                      }    
+.badge h2 {     
+                      font-size:20px;
+                      cursor:pointer;
+                  }
+.iconlink {
+                    height:64px;
+                    width:64px;
+                    position:relative;
+                    left:18px;top:5px;   
+               }   
+.accordionButton {
+       font-family:Oswald;
+       line-height:0;
+       font-weight:400;
+       color:#ffffff;       
+       position:relative;
+      cursor:pointer;
+      padding-top:0px;
+      opacity:0;
+      z-index:540; /*walker was 40 */
+      margin:0 auto 30px;
+      width:314px;
+      height:77px;
+   }
+#directorButton, #aboutFilmButton {top:0};
+.accordionContent  {
+     position:relative;  
+     height:100%;  
+     width:100%;
+     z-index:39;
+     opacity:0;
+     margin-bottom:15px;
+     border-top:#000 1px solid;
+ }
+#aboutFilmContent {}
+#designContent {}
+#historyContent {}
+#communityContent {}
+#directorContent {}
+#getInvolvedContent {}
+
+/* ***********************/
+#videocontainer {   
+                               color:#ffee88;background-color:rgba(42,45,39,0.7);
+                               position:absolute;
+                               z-index:500; width:100%;
+                           }
+#my_video_player {margin:0 auto;}                           
+                           
+.videoIconLeft {left:15px;top:180px;}                             
+.vt-columns {}
+.vt-text {    -moz-box-sizing:border-box;
+                 box-sizing:border-box;
+                 font-family:'Balthazar'; 
+                 font-size:2.0em;
+                 color:#f0e4ec;
+              } 
+.vt-text p   {   
+                     margin:0;
+                     text-indent:5%; 
+                     text-align:justify;   
+                  }                              
+   
+/* video text page bases */
+#ab-wrapper,#dir-wrapper,
+#com-wrapper,#des-wrapper,#get-wrapper,
+#his-wrapper { position:relative;        
+                         width:100%;
+                         height:100%;
+                         background-position: center center;
+                         background-repeat: no-repeat;      
+                         z-index:0;
+                         -webkit-background-size: cover;
+                        -moz-background-size: cover;
+                        background-size: cover;  
+                       }
+#get-wrapper {height:470px;background-color:#f0e7ec;}                       
+#com-wrapper {   
+                          background-image: url('../img/CommunityA.jpg');
+                          height:820px;          
+                        }                                
+ #des-wrapper {         
+                            background-image:url('../img/DesignA.jpg');
+                        }                               
+#his-wrapper {          
+                           background-image:url('../img/HistoryA.jpg');
+                           background-position: top right;
+                       }  
+#dir-wrapper {         
+                            background-image:url('../img/DirectorA.jpg');
+                            background-position: top left;
+                         }                 
+#dir-text h3 {font-family:Oswald;}
+#dir-text,#com-text,#des-text,#his-text {   
+                           position:relative;
+                           float:right; 
+                            z-index:100;
+                           color:#f0e4ec;  
+                           line-height:1.5;
+                          }
+ #com-text         {  float:right;
+                             width:100.0%;
+                             padding:0 2% 1%; 
+                             padding-left:120px; 
+                             padding-top:455px;  
+                          }
+#des-text   {  float:right;
+                     width:44%;
+                     padding:0 4% 1% 2%;  
+                     padding-top:60px;  
+                   }
+#dir-text   {    float:right;
+                     width:44%;
+                     padding:0 4% 1% 4%;  
+                     padding-top:60px;  
+                   }                  
+#his-text   {   
+                    float:right;
+                    width:41.0%;
+                    padding:0 3% 1% 3%;
+                    padding-top:50px; 
+                 }
+#dir-bg,#com-bg, #des-bg, #his-bg { right:0;
+                         position:absolute;
+                         background-color:rgba(0,0,0,0.65);
+                         z-index:5;
+                       }
+#com-bg  {   
+                    width:100%;
+                    top:445px;
+                    height:375px; 
+                 }
+#dir-bg,#des-bg  {    top:0; width:44%;height:100%;background-color:rgba(0,0,0,0.5);}  
+         
+#his-bg  {    top:0; width:47.5%; height:100%;}        
+
+#get-text {float:left}
+
+.com-columns {   -webkit-column-count:2;
+                            -moz-column-count:2;
+                             column-count:2;
+                           -moz-column-gap: 25px;  
+                           -webkit-column-gap:25px; 
+                           column-gap:25px; }
+.des-columns {}    
+/* additonal for the about film text section */
+img {margin:0; padding:0;} 
+#ab-container {        margin: 0;
+                                max-width: 1440px; 
+                                position: relative;
+                                width: 100%;
+                                box-sizing: border-box;
+                                -moz-box-sizing: border-box;
+                                border:1px solid #333333;
+                                background-color:#dddddd;
+                                color:#333333;
+                                padding-left:3%;
+                                padding-bottom:2%;
+                                padding-top:2%;
+                             }
+#ab-container article {position:relative;}           
+.ab-shim  {   float:left;
+                         height:180px;
+                         clear:both;
+                         width:0;
+                         display:none;
+                         margin-left:-5%;
+                        }
+.ab-wrappedpic {  max-width:513px;
+                                 min-width:243px;
+                                 width:36%;
+                                 float:left;
+                                 clear:both;
+                          }
+.ab-lastwrap {padding-bottom:0.75%}
+.ab-pic  {
+                    max-width:433px;
+                    width:84.405%;                     
+                   min-width:233px;
+                 }
+.ab-pic img { 
+                         max-width:100%;
+                         height:auto;
+                         min-width:232px; 
+                       }
+#ab-header {       position:relative; width:50%;margin:0 9.807% 0 40.193%;
+                            margin-top:20px;
+                            margin-bottom:60px;
+                            padding-top:0 !important; 
+                     }    
+#ab-gas_img {  
+                             height: 20.409870%;
+                             max-height:488px;
+                           }
+#ab-mayor_img {
+                                 height: 22.668339%;
+                                 max-height:542px;
+                                }
+#ab-build_img { 
+                                 height: 14.512756%;
+                                 max-height:347px;
+                             }
+#ab-protest_img {
+                                  height: 21.329987%;
+                                  max-height:510px; 
+                                  }
+#ab-change_img {
+                                   height: 21.079046%;
+                                   max-height:504px;
+                                  }
+#aboutFilmArticle  p {       
+                                            margin:0;
+                                            text-indent:3%; 
+                                            text-align:justify;
+                                             padding-right:5.614%;
+                                            font-family:'Balthazar';
+                                            font-size:2.5em;
+                                            line-height:1.4;
+                                        }
+#aboutFilmBQ  { 
+                                  position:relative;
+                                  padding: 0 0 0 0;
+                                  font-style: normal;
+                                  font-weight:400;
+                                  font-family: Oswald;
+                                  width:80%;
+                                  margin: 0 auto;
+                                }
+#aboutFilmBQ p { text-indent:0;font-family:Oswald;line-height:1.2;padding-bottom:12px;}                    
+#aboutFilmBQ:before, #aboutFilmBQ:after { display: block;font-size: 7.5em;}
+#aboutFilmBQ:before { 
+                            content: open-quote; 
+                             margin-left: -9%; 
+                             margin-top:0px;
+                             height: 25px;}
+#aboutFilmBQ:after { 
+                    content: close-quote; 
+                    margin-left: 98%; 
+                    margin-top: -53px; 
+                    height: 43px; 
+                }
+#aboutQuoteForPhone {display:none}
+
+#get-text                  {color:#2A2D27;padding:70px 0%; width:70%;position:relative;margin:0 15%;}
+#get-text h3             {font-family:Oswald;letter-spacing:0.3em;color:#ff0000;position:relative;line-height:1.5}
+#getmaintextbox     {float:left;position:relative;width:100%;border: #2A2D27 solid 2px;box-sizing:border-box;-moz-box-sizing:border-box}
+#getmaintext           {padding:3%;font-family:Balthazar;font-size:1.4em}
+#getsocial                {position:absolute;float:right;padding:0; top:75px; right:-32px;}
+.getsocicon              {float:left;min-width:50px;height:50px;margin-right:20px;padding-top:10px;}
+#getsocial .getsocicon:last-child {margin-right:0px;}
+.getsocicon a           {text-decoration: none;color:#2A2D27;}
+.getsocicon p           {font-size:5em;line-height:0px;}
+.entyporeg               {font-family:"Entypo";padding:0; padding-top:15px;color:#2A2D27}   

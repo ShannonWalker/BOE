@@ -1,0 +1,458 @@
+ #shortsubtitle    {display:none;}
+ #longsubtitle    {display:block;}
+ #aboutFilmArticle p { font-size:2.1em; }            
+ #aboutFilmBQ p { text-indent:0; font-size:2.2em;padding-left:25px;}   
+ #aboutFilmBQ:before, #aboutFilmBQ:after { font-size: 6.6em; } 
+ #aboutFilmBQ:after {height:43px;margin-top:-48px}     
+ #ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;   
+                                            margin-top:20px; margin-bottom:60px;  }  
+@media only screen and (min-width:1025px) 
+{ /* this takes care of default to desktop like display for any tablet wider than 1024 css pixels */
+body {width:1025px; margin:0 auto;}
+nav  a.darkmenu {color:#300a14;}
+nav a.lightmenu  {color:#F0E4EC;}
+.topbanner nav {display:block;left:42.0%}
+.nav li.openmenu { margin-right: 2.0em;font-size:1.4em;} 
+.home {display:block;}       
+.top-maintitle {font-size:3.2em; text-align:none;}                       
+#top-filmtitle {width:317px;}
+.top-subtitle  {font-weight:400;font-size:1.6em;} 
+.top-director  {padding-top:14px;}
+.nav li             { margin-right: 1.4em; font-size:1.4em; font-weight:normal;}
+#page-filmtitle {width:454px;}
+.page-maintitle {  font-size:4.0em;line-height:0;}
+.page-subtitle { font-weight:300;line-height:1.30;margin-top:1.0em;font-size:2.4em;border-bottom:1px solid #300a14;}
+.page-director {  font-family:Oswald; font-size:2.4em;line-height:1.0;margin-top:1.0em;}
+  
+.accordionButton {margin:0;width:100px;height:110px;}
+.badge { border:solid 2px #000; background-image:url('../img/designBlur3.png');
+               -webkit-border-radius:0px;-moz-border-radius:0px;border-radius:0px;overflow:hidden;} 
+.badge_icon_container  { float:none;height:75px;width:100px;border-bottom:#777777 1px solid;
+                                            -webkit-border-radius:0px;-moz-border-radius:0px;border-radius:0px;}       
+.badge_title_container {left:0px;top:0px;position:relative;height:35px;width:100px;border-top:#111111 1px solid;}
+.badge_title                   {position:absolute;top:0;bottom:0;left:0;right:0;height:25px;}  
+.badge h2 { text-align:center;line-height:0;padding-top:15px;} 
+                                       
+.his-display {top:175px; right:43.5%}
+.des-display {top:180px;right:49%;}  
+.com-display {top:590px;left:10px;}                        
+#designButton,#historyButton, #communityButton  {padding-top:0px;position:absolute;  font-size:20px;}                           
+#communityButton  {font-size:16px;}
+#communityButton .badge h2 { font-size:16px   }
+#dir-bg,#des-bg,#his-bg {height:100%}   
+#com-text {font-size:1.9em;}
+#com-wrapper { background-position: center center; }   
+#des-bg  {width:48%;}
+#des-text {width:48%;font-size:1.9em;}
+#his-text {width:45%; font-size:1.9em;}
+#his-wrapper { background-position: 10% 0;  }   
+#his-bg {height:100%;width:54%;} 
+
+}
+
+@media only screen and (max-width:1024px)
+{
+#page-filmtitle {display:none;}
+section.banner.home {height:108px;}
+ .top-director   {padding-right:30px;text-align:right;margin-top:-32px}
+ #top-filmtitle-left {padding-top:10px}
+.topbanner header {height:100%;
+                                  display:block;}
+.topbanner nav {display:none;}  
+.accordionButton {  opacity:1;
+                               position:relative;}
+.accordionContent {opacity:1;
+                               position:relative;
+                               margin-bottom:30px}
+ #ab-header {width:56%}                               
+#ab-wrapper  {margin-top:0;margin-bottom:108px;}      
+#ab-container  {top:82px;}                                           
+#aboutFilmContent  {margin-top:-108px;}
+#directorContent, #historyContent,#designContent, #communityContent {margin-top:0px;}  
+#ab-wrapper,#com-wrapper  {background-color:#2A2D27}
+
+#com-wrapper,#dir-wrapper,
+#des-wrapper,
+#his-wrapper  {background-color:#2A2D27;
+                        -webkit-background-size:cover;
+                        -moz-background-size:cover;
+                         background-size:cover;
+                         margin-top:-108px;
+                         background-position:0% 82px;height:1024px;position:relative;
+                       }
+#his-wrapper {background-image:url('../img/HistoryA.jpg');background-position:60% 82px;}  
+#des-wrapper { background-image:url('../img/DesignA.jpg');}
+                          
+#dir-wrapper    { background-image:url('../img/DirectorB.jpg');}
+#com-wrapper {background-image:url('../img/CommunityB.jpg'); 
+                           -webkit-background-size:contain;
+                           -moz-background-size:contain;
+                            background-size:contain;}                           
+
+#dir-bg,#des-bg, #his-bg {height:100%;}
+#get-wrapper         {background-color:#f0e7ec;}
+#get-text                {color:#2A2D27;padding:70px 0%; width:70%;position:relative;margin:0 15%;}
+#get-text h3           {font-family:Oswald;letter-spacing:0.3em;color:#ff0000;position:relative;line-height:1.5}
+#getmaintextbox   {float:left;position:relative;width:100%;border: #2A2D27 solid 2px;box-sizing:border-box;-moz-box-sizing:border-box}
+#getmaintext          {padding:3%;font-family:Balthazar;font-size:1.4em}
+#getsocial              {position:absolute;float:right;padding:0; top:75px; right:-32px;}
+.getsocicon            {float:left;min-width:50px;height:50px;margin-right:20px;padding-top:10px;}
+#getsocial .getsocicon:last-child {margin-right:0px;}
+.getsocicon a         {text-decoration: none;color:#2A2D27;}
+.getsocicon p         {font-size:5em;line-height:0px;}
+.entyporeg              {font-family:"Entypo";padding:0; padding-top:15px;color:#2A2D27}   
+}
+@media screen and (min-width:1024px) and (max-width:1024px)
+{#top-filmtitle {width:auto;} 
+.top-subtitle   {font-weight:400;font-size:1.6em;} 
+.top-director   {padding-top:14px; padding-right:20px;text-align:right;}
+#first-wrappedpic {margin-top:-20px;}
+#aboutFilmBQ:before {content: open-quote;margin-left: -9%;margin-top:0px;height: 25px;}
+#aboutFilmBQ:after {content: close-quote;margin-left: 95%;margin-top: -45px;height: 45px;}    
+#his-bg,#des-bg,#com-bg  {  display:block; position:absolute;background-color:rgba(0,0,0,0.6);}        
+#his-wrapper {height:774px;background-position:-308px 82px}
+#his-text   {float:right;padding-top:150px;font-size:1.9em;width:527px;} 
+#his-bg  {  right:0;bottom:0px;height:774px;width:570px;}
+#des-wrapper {height:724px;}
+#des-bg  {width:48%;}
+#des-text {width:48%;font-size:1.9em;padding-top:142px}
+#com-wrapper {height:874px}
+#com-bg {top:485px; background-color:#2A2D27;height:400px; } 
+#com-text {float:left;left:0; padding:0 3%;margin:0;width:100%;line-height:1.5;position:absolute;bottom:35px;font-size:1.9em;}
+#dir-text   {float:right;font-size:1.8em;top:375px;width:460px;}                            
+#dir-bg  { display:none; }  
+#get-text {  width:80%;margin:0 10% }
+}  
+
+@media only screen and (max-width:1023px)
+{#com-text,#des-text,#his-text,#dir-text {float:left;left:0;margin:0;width:100%;line-height:1.5; padding:0 3%;position:absolute;}          
+}    
+
+@media only screen and (min-width:960px) and (max-width:1023px)
+{.top-subtitle  {font-size:1.5em;font-weight:normal} 
+ .top-director {font-size:1.5em;padding-top:15px;}
+}
+@media only screen and (min-width:900px)  and  (max-width:1023px)
+{
+#first-wrappedpic {margin-top:-20px;}   
+#aboutFilmArticle p { font-size:1.9em;} 
+#aboutFilmBQ p { font-size:2.0em}       
+#aboutFilmBQ:before,#aboutFilmBQ:after {font-size:5.5em;} 
+#aboutFilmBQ:before {padding-top:60px}
+#aboutFilmBQ:after {padding-top:10px} 
+#ab-container {padding-left:4%;} 
+#ab-header {margin-top:0px; margin-bottom:40px;}  
+#his-bg,#des-bg  { display:block; width:100%;position:absolute; background-color:rgba(0,0,0,0.7);   }
+#his-wrapper {background-image:url('../img/HistoryB.jpg');
+                        background-position:0px 82px;}  
+#his-text  {bottom:40px;font-size:1.7em;
+                  -webkit-column-count:2; -moz-column-count:2;column-count:2;-moz-column-gap: 20px; -webkit-column-gap:25px; column-gap:25px;}
+#his-bg  { top:690px;height:334px;}  
+#des-wrapper { background-image:url('../img/DesignP.jpg');height:774px}
+#des-text {bottom:50px; -webkit-column-count:2; -moz-column-count:2;column-count:2;-moz-column-gap: 20px; -webkit-column-gap:25px; column-gap:25px;}
+#des-bg {top:414px; height:360px}
+#dir-wrapper  {background-image:url('../img/DirectorB.jpg');} 
+#dir-text,#des-text {font-size:1.8em;}     
+#com-wrapper {}
+#com-text {bottom:80px;font-size:1.9em;line-height:1.4;}
+#com-bg   {display:none;}
+#com-wrapper {background-image:url('../img/CommunityA.jpg');-webkit-background-size:contain;-moz-background-size:contain;background-size:contain;}
+#dir-wrapper {background-position:10% 82px}  
+#dir-text {top:515px;}
+#dir-bg {display:none}
+#get-text { width:85%;margin:0 7.5% }                           
+}    
+@media only screen and  (min-width:768px) and (max-width:899px) 
+{ #first-wrappedpic {margin-top:-20px;}    
+   #aboutFilmArticle p { font-size:1.7em;}
+   #aboutFilmBQ p { text-indent:0; font-size:2.1em;padding-left:18px;}       
+   #aboutFilmBQ:before, #aboutFilmBQ:after { font-size:6.0em;} 
+   #aboutFilmBQ:after {padding-top: 13px;} 
+   #ab-container {padding-left:4%;} 
+   #ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;   
+                         margin-top:20px; margin-bottom:60px;}  
+} 
+@media only screen and (min-width:769px) and (max-width:899px)   
+{#his-bg,#des-bg  { display:block; width:100%;position:absolute; background-color:rgba(0,0,0,0.7);}   
+ #his-wrapper {background-image:url('../img/HistoryB.jpg');
+                         background-position:0px 82px;position:relative}      
+#his-text  {bottom:60px;font-size:1.7em;-webkit-column-count:2; -moz-column-count:2;column-count:2;-moz-column-gap: 20px; -webkit-column-gap:25px; column-gap:25px; }
+#his-bg    {top:624px;height:400px;}       
+#des-wrapper { background-image:url('../img/DesignP.jpg');height:774px}
+#des-text {bottom:60px; -webkit-column-count:2; -moz-column-count:2;column-count:2;-moz-column-gap: 20px; -webkit-column-gap:25px; column-gap:25px;}
+#des-bg   {top:400px; height:374px}
+#dir-wrapper  { background-image:url('../img/DirectorB.jpg');} 
+#dir-wrapper  {background-position: 10% 82px}  
+#dir-text         {top:490px;}
+#dir-text, #des-text {font-size:1.8em;}       
+#com-text {bottom:60px;font-size:1.9em;line-height:1.4;font-size:1.8em}
+#com-bg   {top:396px; height:424px;background-color:#2A2D27}
+#com-wrapper {background-image:url('../img/CommunityA.jpg');
+                          height:820px;}      
+.com-columns {padding:1% 2% 1% 2%;
+                           -webkit-column-count:2;
+                           -moz-column-count:2;
+                           column-count:2;
+                           -moz-column-gap: 20px;  
+                           -webkit-column-gap:20px; 
+                           column-gap:20px; }                          
+#get-text  {width:90%; margin:0 5%}
+.getsocicon {margin-right:12px;}
+.getsocicon p {font-size:4.5em;}
+#getsocial .getsocicon:last-child {margin-right:0px;}
+}     
+
+@media screen and (min-width:768px) and (max-width:768px) /*and (orientation:portrait)*/
+{
+
+#com-bg, #des-bg, #his-bg  {display:none;}
+#his-text,#des-text,#dirmaintext {-webkit-column-count:2;-moz-column-count:2;column-count:2;-moz-column-gap: 25px;-webkit-column-gap:25px;column-gap:25px; }               
+
+#his-bg,#des-bg  { display:block; width:100%;position:absolute; background-color:rgba(0,0,0,0.6);   }
+#first-wrappedpic {margin-top:-25px;}
+#aboutFilmArticle p { font-size:1.7em;}
+#aboutFilmBQ p { text-indent:0; font-size:2.1em;padding-left:18px;}       
+#aboutFilmBQ:before, #aboutFilmBQ:after { font-size: 6.0em; } 
+#aboutFilmBQ:after {padding-top: 13px;} 
+#ab-container {padding-left:4%;  } 
+#ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;   
+                                     margin-top:20px; margin-bottom:60px;  }  
+    
+#his-wrapper {  background-image:url('../img/HistoryB.jpg'); }    
+#his-text  { bottom:30px;font-size:1.8em;}                 
+#his-bg  { top:590px; height:436px;}                      
+#des-wrapper { background-image:url('../img/DesignP.jpg');   /* walker do I want cover here ? */
+                              -webkit-background-size:cover;
+                              -moz-background-size:cover;
+                               background-size:cover;}
+#des-text   { bottom:100px;}
+#des-bg  { left:0; top:505px; height:519px;}                              
+#com-text {bottom:40px}
+#com-bg {display:none}
+#com-wrapper {  background-image:url('../img/CommunityB.jpg');}
+#dir-wrapper {background-image:url('../img/DirectorB.jpg');}
+#dir-text   {font-size:1.8em;top:490px; }
+#dir-bg  { display:none; }   
+#get-text        {width:95%;margin:0 2.5%}  
+.getsocicon     {margin-right:12px;}
+.getsocicon p {font-size:4.5em;} 
+#getsocial  .getsocicon:last-child {margin-right:0px;}
+}
+
+@media only screen and (max-width:767px)
+{ 
+.topbanner {position:relative;}   
+#top-filmtitle {width:auto} 
+.top-director   {padding-right:20px;text-align:right;margin-top:0px;font-size:1.6em;text-align: right;}
+#top-filmtitle-left {padding-top:0px}
+.top-subtitle   {font-weight:400;font-size:1.6em;} 
+
+#ab-container {padding-left:3%;  margin-bottom:15px;}      
+.com-columns {padding:1% 2% 1% 2%;-webkit-column-count:1;-moz-column-count:1;column-count:1;
+                                 -moz-column-gap: 0px;-webkit-column-gap:0px;column-gap:0px; } 
+#his-bg,#des-bg,#com-bg,#dir-bg  { display:none; } 
+      
+#get-wrapper        {text-align:center}
+#get-text                {width:95%;margin:0 2.5%}   
+#get-text h3          {line-height:1.0}              
+#getmaintextbox   {margin-top:0px}
+#getmaintext         {font-size:1.0em}
+#getsocial              {position:relative;float:none;margin:0 auto;padding:0;padding-left:48px;width:420px;height:60px;right:0px;top:0px;top:20px;}
+.getsocicon p        {font-size:5em;} 
+.getsocicon           {margin-right:20px;padding:0;margin-top:0;}
+#getsocial .getsocicon:last-child {margin-right:0px;}                   
+}
+@media only screen and (min-width:569px) and (max-width:767px)
+{   
+ .accordionButton {margin-bottom:15px;}
+ .accordionContent {margin-bottom:15px;}
+  
+ #aboutFilmContent {margin-top:-93px;}
+ #ab-wrapper {margin-bottom:93px;}
+ .ab-shim {display:block;height:150px;margin-left:-3.5%;}  
+ div .ab-shim:first-child {display:none}  
+ #aboutFilmArticle p {text-indent:4%;padding-right:3%;font-size:1.8em;}
+ #aboutFilmBQ p { text-indent:0; font-size:1.8em;padding-left:28px;}       
+ #aboutFilmBQ:before, #aboutFilmBQ:after {font-size: 5.4em; } 
+ #aboutFilmBQ:after {height:33px;margin-top:-40px}  
+     
+ .ab-wrappedpic  {margin-top:7px;margin-bottom:7px;} 
+ #ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;margin-top:20px; margin-bottom:60px;  }   
+ .ab-pic {min-width:216px;}
+ .ab-pic img {min-width:216px;}
+    
+ #his-wrapper,#des-wrapper,#com-wrapper,#dir-wrapper {margin-top:-93px;} 
+ #his-wrapper {background-image:url('../img/HistoryC.jpg');-webkit-background-size:contain;-moz-background-size:contain;background-size:contain;
+                         background-position:left 82px;height:1024px;}    
+ #his-text { font-size: 1.9em; bottom:7.0%;padding:0% 3.0% 1%;line-height:1.5;}  
+      
+ #des-wrapper {background-image:url('../img/DesignC.jpg');
+                          background-position:left 82px;-webkit-background-size:contain;-moz-background-size:contain;background-size:contain;
+                          height:980px;
+                          }
+#des-text      {bottom:5.5%;padding:0 3.0% 1%;}
+    
+#com-wrapper {background-image:url('../img/CommunityC.jpg');
+                          background-position:left 82px;
+                          height:1024px;}
+#com-text {bottom:4.5%;padding:0 3.5%;1.8em}
+   
+#dir-wrapper {background-image:url('../img/DirectorC.jpg');
+                        background-position:left 82px;-webkit-background-size:contain;-moz-background-size:contain;background-size:contain;
+                        height:860px; }
+#dir-text      {  font-size:2.0em; top:400px; padding:0 3% 3%;position:absolute;}  
+#dir-text h3 {font-size:28px;}                    
+}
+
+@media only screen and (max-width:568px)
+{#first-wrappedpic {margin-top:-30px;} 
+#aboutFilmBQ p { text-indent:0; font-size:1.8em;padding-left:28px;}       
+.accordionButton {margin-bottom:5px;}
+.accordionContent {margin-bottom:5px}   
+#aboutFilmContent {margin-top:-83px;}
+#ab-wrapper {margin-bottom:88px;} /* 83 + 5 */ 
+#his-text {font-size: 1.8em; bottom:25px;padding:0% 3%;} 
+#his-wrapper     {background-image:url('../img/HistoryC.jpg');background-position:left 82px;background-color:red}
+#com-wrapper,#dir-wrapper,
+#des-wrapper,#his-wrapper  {background-color:#2A2D27; -webkit-background-size:contain; -moz-background-size:contain;background-size:contain;}
+#com-bg, #des-bg,#dir-bg,#his-bg  {display:none;}
+#directorContent, #historyContent,#designContent, #communityContent {margin-top:0px;}  
+.com-columns { padding:1% 2% 1% 2%;-webkit-column-count:1;-moz-column-count:1;column-count:1;-moz-column-gap: 0px;-webkit-column-gap:0px;column-gap:0px; } 
+#com-wrapper,#dir-wrapper,#des-wrapper,#his-wrapper {margin-top:-83px;}  
+#com-wrapper {background-image:url('../img/CommunityC.jpg'); background-position:left 82px;}  
+#dir-wrapper {background-image:url('../img/DirectorC.jpg');   background-position:left 82px;}
+#des-wrapper {background-image:url('../img/DesignC.jpg');background-position:left 82px;}
+#des-text {line-height:1.5;}
+#get-wrapper        {text-align:center}
+#get-text               {width:95%;margin:0 2.5%;padding-top:10px;}   
+#get-text h3          {line-height:1.0}              
+#getmaintextbox  {margin-top:0px}
+#getmaintext         {font-size:1.0em}
+#getsocial             {position:relative;float:none;margin:0 auto;padding:0;padding-left:48px;width:420px;height:60px;right:0px;top:0px;top:20px;}
+.getsocicon p       {font-size:5em;} 
+.getsocicon          {margin-right:20px;padding:0;margin-top:0;}
+#getsocial .getsocicon:last-child {margin-right:0px;}
+}
+@media only screen and (min-width:568px) and (max-width:568px)
+{
+#ab-wrapper {margin-bottom:88px;}   /* walker 93 vs 83 */
+.ab-shim {display:block;height:150px;margin-left:-3.5%;}  
+div .ab-shim:first-child {display:none}  
+#aboutFilmArticle p {text-indent:4%; padding-right:3%;font-size:1.7em;}
+
+#ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;margin-top:20px; margin-bottom:60px; margin-left:41%;margin-right:9% }  
+.ab-pic {min-width:216px;}
+.ab-pic img {min-width:216px;}
+#aboutFilmBQ p { text-indent:0; font-size:1.8em;padding-left:28px;}       
+#aboutFilmBQ:before, #aboutFilmBQ:after {font-size: 5.4em; } 
+#aboutFilmBQ:before {margin-left:-14px}
+#aboutFilmBQ:after {height:33px;margin-top:-40px}  
+
+#his-wrapper {height:965px;}    
+
+#com-wrapper { height:885px;}
+#com-text {font-size:1.8em; bottom:20px; padding:0 3.5%;}
+#des-wrapper {height:838px;}
+#des-text       {font-size:1.8em;bottom:20px;;padding:0 3.0% 1%;}
+
+#dir-wrapper  {height:770px;}
+#dir-text        {font-size:2.0em; top:275px; padding:0 3% 3%;position:relative; }
+#dir-text h3   {font-size:28px;}                    
+}
+
+@media only screen and (min-width:481px) and (max-width:567px)
+{
+#ab-wrapper {  margin-bottom:88px;    }     
+
+#ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;margin-top:20px; margin-bottom:60px; margin-left:41%;margin-right:9% }  
+.ab-pic {min-width:216px;}
+.ab-pic img {min-width:216px;}
+.ab-shim {display:block;height:150px;margin-left:-3.5%;}  
+div .ab-shim:first-child {display:none}  
+#aboutFilmArticle p {text-indent:4%; padding-right:3%;font-size:1.7em;}
+#aboutFilmBQ p { text-indent:0; font-size:1.8em;padding-left:28px;}       
+#aboutFilmBQ:before, #aboutFilmBQ:after {font-size: 5.4em; } 
+#aboutFilmBQ:before {margin-left:-14px}
+#aboutFilmBQ:after {height:33px;margin-top:-40px}     
+    
+#his-wrapper {height:975px;}    
+#his-text {font-size: 1.8em; bottom:3%;padding:0% 3%; } 
+ #des-wrapper {height:818px;} 
+#des-text        {font-size:1.7em;bottom:3%;padding:0 3.0% 1%;}
+#com-wrapper { height:860px;}
+#com-text {font-size:1.7em; bottom:3%; padding:0 3.5%;}
+#dir-wrapper  {height:770px;}
+#dir-text        {font-size:2.0em; bottom:4.25%; padding:0 3% 3%; }
+#dir-text h3   {font-size:28px;}                    
+}
+
+@media only screen and (max-width:480px)
+{.top-director     {text-align: left}  
+#aboutFilmArticle p {padding-left:2;margin-left:0; padding-right:2;text-align:justify;font-size:1.8em; }   
+#com-text,#des,#dir-text,#his-text  { font-size:1.8em;}
+#com-text { font-size:1.8em;bottom:20px;padding:0 3.5%;line-height:1.5;}
+}
+@media only screen and (min-width: 480px) and (max-width:480px) 
+{             
+.top-maintitle {font-size:3.2em;}
+#ab-container {padding:0 0 2% 2%; }
+.ab-shim {display:block;margin:0 0 10px 0; height:375px;}
+#ab-topshim  {height:10px; }          
+.ab-wrappedpic {max-width:582px;width:100%; margin:10px auto;}
+.ab-pic {width:100%; margin:5px auto;}                      
+.ab-pic img {max-width:400px;border-top: transparent 10px solid;border-bottom:transparent 10px solid}
+#ab-header {width:442px;margin:0 auto;margin-top:0px; margin-bottom:0px;top:0;} 
+#aboutFilmBQ {margin-top:0px;width:80%;position:relative;padding-bottom:80px}
+#aboutFilmBQ p  {top:20px;position:absolute;line-height:1.5;margin:0 auto;margin-left:0px;text-align:left;padding-right:0px;}  
+#aboutFilmBQ:before {position:relative;top:-25px;height:10px;width:38px;margin-left:-42px;margin-bottom:10px; 
+                                      margin-top:0;padding-top:1px;padding-bottom:0px;line-height:0}
+#aboutFilmBQ:after {position:relative;bottom:-70px}                                     
+#aboutFilmArticle {margin-top:0px;}
+#his-wrapper     {height:960px;}                                  
+#his-text {float:none;font-size: 1.8em;bottom:20px;}
+#des-wrapper {height:975px;}             
+#des-text    {bottom:20px;padding:0 3.0%;}
+#com-wrapper {height:940px;}
+#com-text {bottom:20px}
+#dir-wrapper {height:960px;}
+#dir-text    {padding:0 3.0%;position:relative;top:220px;}  
+#dir-text h3 {font-size:25px;}                    
+}
+@media screen and (min-width:320px) and (max-width:479px)
+{#longsubtitle   {display:none;}
+#shortsubtitle  {display:block}
+.top-maintitle   {font-size:2.8em;}
+.accordionButton { width:312px;}
+#ab-container {padding:0 4px 5px 4px; }
+.ab-shim {display:block;margin: 10px 5px; height:400px;}
+#ab-topshim {display:block; height:250px;}                     
+.ab-wrappedpic { max-width:470px;width:100%;margin:6px auto 14px;} 
+.ab-pic {width:100%;margin:0 auto;}
+.ab-pic img {min-width:298px;border-top: transparent 10px solid;}
+.ab-pic img:first-child {border-top:transparent 20px solid;}
+#ab-header {position:relative;width:98%; margin:0 auto;margin-top:0px; margin-bottom:10px; height:100px;}
+#aboutTopParagraph {margin-top:100px;} 
+#aboutFilmBQ:before, #aboutFilmBQ:after {font-size:1px;content:""} 
+#aboutFilmBQ  {width:100%;}
+#aboutFilmBQ p {position:absolute;1.5em; line-height:1.4;padding:0 3px;text-align:justify;} 
+#his-wrapper {height:1118px;}    
+#his-text {font-size:1.8em;bottom:20px;padding:0% 3.0%;}  
+#des-wrapper {height:995px;}
+#des-text   {font-size:1.8em;bottom:20px;padding:0  4%;} 
+#com-wrapper {height:1110px;}
+#com-text {font-size:1.8em;bottom:20px;padding:0 3.5%;line-height:1.5;}
+#dir-wrapper {height:775px;} 
+#dir-text   {font-size:1.8em; bottom:20px;padding:0  4%;line-height:1.5;}
+#dir-text h3 {font-size:22px;}                       
+#get-text h3 {letter-spacing:0.1em;font-size:32px}
+#getmaintextbox {border-width:1px;margin-bottom:-15px}
+.getsocicon p {font-size:4.0em;line-height:0px;}
+#getsocial {width:320px;left:-5px;padding:0;margin:0;}
+.getsocicon {margin-right:5px;min-width:40px;}
+.entyporeg {width:40px;}
+}
+@media only screen and (max-width:320px) 
+{ #his-wrapper   {height:1150px}
+#des-wrapper  {height:1030px}
+#com-wrapper {height:1160px}
+}
