@@ -110,11 +110,10 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
 	 
 });
 
-function checkClass( obj)
-{
-    return Object.prototype.toString.call( obj ).slice( 8, -1).toLowerCase();
-}
 /* configuration routines */
+/* boeInit called once in JQuery ready. Sets up boeSettings variables. Also determines pixel density and pixel ratio used to determine if display should be
+ * for a mobile device or a desktop
+ */
 function boeInit()
 {         
 	var   $buttons= $('.accordionButton'),
@@ -197,6 +196,7 @@ function boeInit()
 	 });
 	return settings;
 }
+ /* boeConfig changes some boeSettings after resize event; also called once after boeInit, called from jQ ready */
 function boeConfig()
 {  	 
  
@@ -238,7 +238,6 @@ function boeConfig()
 	         				   $.boeSettings.buttonGroupAdjustment = 0;
 	                    	   $.boeSettings.scrollToMarkAdjustment=0;
 	                    	   sizeBannersAndPagesMobile(); 
-	                    	 
 	             			} 	
 		      }
 	 if ($.boeSettings.videoOpen)
@@ -253,50 +252,15 @@ function boeConfig()
 	 		else
 	 		{  
 	 	   		hideTitlesForScroll();
-	 	   		showButtons();
 	 		}
 	 }
 } 
-/* scroll routines */
-function titlesForScroll()
-{      console.log("titleforscroll");
-   var menuDark = $.boeSettings.navAnchors.hasClass("darkmenu")
-   if ($.boeSettings.desktop)   		 		
-   {  	if( menuDark && $.boeSettings.doc.scrollTop() > 110 ) 
-     	{  	    $.boeSettings.navAnchors.removeClass("darkmenu")
-      			$.boeSettings.topBannerHeader.addClass('showbg');
-      			$.boeSettings.topBanner.addClass("showbackground");
-     			$.boeSettings.navAnchors.addClass("lightmenu");
-     			$.boeSettings.topBannerHeader.fadeIn();
-    		    $.boeSettings.bigFilmTitle.fadeOut();
-    	}
-      	else  if(!menuDark && $.boeSettings.doc.scrollTop() <=110)
-        	     {  
-        	   	  	$.boeSettings.navAnchors.removeClass("lightmenu");
-            	  	$.boeSettings.topBanner.removeClass("showbackground");
-            	  	$.boeSettings.navAnchors.addClass("darkmenu");
-            	  	$.boeSettings.topBannerHeader.fadeOut();
-     	            $.boeSettings.bigFilmTitle.fadeIn();
-              	 }  
-        }
-}
-function hideTitlesForScroll()
-{
-	$.boeSettings.bigFilmTitle.hide();
-	$.boeSettings.topBanner.removeClass("showbackground");   
-	$.boeSettings.topBannerHeader.addClass("showbg").fadeIn();
-	showButtons();
-}
-function scrollToMark($target, adjustment)
-{   var a = adjustment || $.boeSettings.scrollToMarkAdjustment,  
-	      scrollSpeed = $.boeSettings.videoOpen?1200:500,
-          topDestination = $target.offset().top-a; 
-          $('body,html').animate({scrollTop: topDestination }, scrollSpeed);
- } 
- function showButtons()
-{$.boeSettings.accordionButtons.show();
-}
 /*sizing routines */
+/* sizeBannerAndPagesDesktop, the home banner which is where the main titles screen displays in desktop mode. Home banner is set to the hight of the
+   viewport . bannerHomeDiv contains the maintitles, so that div is padded on top with half of the difference between the titles height and the window height
+   bannerPages is where an opened "page" such as sections for History, Design, etc is shown. So an open page has a min height of the  viewport
+   as does the content wrapper for each of these sections
+  */ 
 function sizeBannersAndPagesDesktop(){
 		var wH = $.boeSettings.windowHeight; 
         $.boeSettings.bannerHome.css( "height", wH + "px");
@@ -307,24 +271,31 @@ function sizeBannersAndPagesDesktop(){
 function sizeBannersAndPagesIPad(){
 	 var contentMinHeight = 1024,
 	        bannerHomeHeight = $.boeSettings.topBannerHeight + $.boeSettings.initButtonOffset,
-	       pH = 2* (bannerHomeHeight - $.boeSettings.buttonHeight + 
-	                           ($.boeSettings.accordionButtons.length * ( $.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin))); 
-	   $.boeSettings.bannerPages.css("min-height",pH +"px"); 
+	        pageH=sizeButtonBannerPage();
+	   $.boeSettings.bannerPages.css("min-height",pageH +"px"); 
        $.boeSettings.bannerHome.css( "height", bannerHomeHeight + "px");  
        /*$(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );  */
        $.boeSettings.bannerHomeDiv.css('padding-top', 0 ); 
  }
+ 
 function sizeBannersAndPagesMobile() {
-   var ph = 2*($.boeSettings.topBannerHeight + $.boeSettings.initButtonOffset+ 
-   ( ($.boeSettings.accordionButtons.length) * ($.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin) ) - $.boeSettings.buttonBottomMargin),
+   var pageH = sizeButtonBannerPage(),
    contentMinHeight = 400;
- $.boeSettings.bannerPages.css("min-height",ph +"px");  
+ $.boeSettings.bannerPages.css("min-height",pageH +"px");  
  $.boeSettings.bannerHome.css( "height",$.boeSettings.initButtonOffset + "px");  
  $(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );  /*$.boeSettings.topBannerHeight + $.boeSetttings.initButtonOffset*/
  $.boeSettings.bannerHomeDiv.css('padding-top', 0 );    
 }
+
+function sizeButtonBannerPage()
+{
+	var unusedWindow= $.boeSettings.windowHeight - $.boeSettings.scrollToMarkAdjustment+$.boeSettings.initButtonOffset,
+	       distanceToMoveLastButton= ($.boeSettings.accordionButtons.length-1)*($.boeSettings.buttonBottomMargin+$.boeSettings.buttonHeight)+($.boeSettings.topBannerHeight+$.topBannerHeight+$.boeSettings.initButtonOffset);      
+	       return (unusedWindow+distanceToMoveLastButton);
+}
+
 function videoDimensions(wH,wW)
- { console.log(wH+" "+wW);
+ { 
  	var aspectRatio=16/9,
            inverseAspectRatio = 9/16,
            sideSpace,
@@ -356,6 +327,72 @@ function videoWrapperTop(index)
 {    var topV =   (index * ( $.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin  ) ) + $.boeSettings.buttonHeight ;
      return topV;
 }
+
+
+
+/* scroll routines */
+
+/* titlesForScroll  called after boeConfig which is to say after a resize event. 
+  * titlesForScroll toggles visibility of header picture depending upon scroll position. menuDark is dark menu on lighter background photo. Scroll changes to
+  * darker background image in header and thus lightMenu, offwhite menu elements
+  *  */
+function titlesForScroll()
+{   
+   var menuDark = $.boeSettings.navAnchors.hasClass("darkmenu")
+   if ($.boeSettings.desktop)   		 		
+   {  	if( menuDark && $.boeSettings.doc.scrollTop() > 110 ) 
+     	{  	    $.boeSettings.navAnchors.removeClass("darkmenu")
+      			$.boeSettings.topBannerHeader.addClass('showbg');
+      			$.boeSettings.topBanner.addClass("showbackground");
+     			$.boeSettings.navAnchors.addClass("lightmenu");
+     			$.boeSettings.topBannerHeader.fadeIn();
+    		    $.boeSettings.bigFilmTitle.fadeOut();
+    	}
+      	else  if(!menuDark && $.boeSettings.doc.scrollTop() <=110)
+        	     {  
+        	   	  	$.boeSettings.navAnchors.removeClass("lightmenu");
+            	  	$.boeSettings.topBanner.removeClass("showbackground");
+            	  	$.boeSettings.navAnchors.addClass("darkmenu");
+            	  	$.boeSettings.topBannerHeader.fadeOut();
+     	            $.boeSettings.bigFilmTitle.fadeIn();
+              	 }  
+        }
+}
+/* if configured for a mobile browser, this will hide the titles that show as part of the home banner section. They are suppressed because the mobile
+ * configuration will have navigation buttons over that portion of the screen
+ */
+function hideTitlesForScroll()
+{
+	$.boeSettings.bigFilmTitle.hide();
+	$.boeSettings.topBanner.removeClass("showbackground");   
+	$.boeSettings.topBannerHeader.addClass("showbg").fadeIn();
+	showButtons();
+}
+/*
+ * scrollToMark takes elements position in the document and scrolls to the top of the document less an adjustment.
+ * The adjustment is either a boeSetting, scrollToMarkAdjustment  which adjusts how an element ""slides up"  in a mobile environment or
+ * @adjustment is a parameter indicating returning a button menu group to an offset, therefore when an "open"" button is closed the adjustment parameter
+ * puts the button and the group it is in, back to the proper offset from the top of the document
+ * 
+ * scrollToMark is mostly called within a promScrollToMark wrapper that makes the scrolling an action of a deferred object so that the scrolling completes before  
+ * subsequent actions are executed
+ * Called in: initialization in JQ ready when the home banner is loaded [dektop version only]
+ * showContent FromMenu, handleButtonRequest, showContentButtonForScroll
+ * scrolling is set to go faster if closing a video (because there is an extra step after the video page closes)
+ */
+function scrollToMark($target, adjustment)
+{   var a = adjustment || $.boeSettings.scrollToMarkAdjustment,  
+	      scrollSpeed = $.boeSettings.videoOpen?1200:500,
+          topDestination = $target.offset().top-a; 
+          $('body,html').animate({scrollTop: topDestination }, scrollSpeed);
+ } 
+ 
+/* showButtons if version is mobile and using button navigation*/ 
+ function showButtons()
+{
+	$.boeSettings.accordionButtons.show();
+}
+
 /* full featured navigation routines -- menu */
 function handleMenuRequest($target)  
 { 
