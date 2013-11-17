@@ -33,7 +33,7 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
        																									$.screenIn();
         																							}   
      												 											}	
-                                          														},100); }
+                                          														},100); };
 	 $.ajaxSetup({ cache: true });
      $.getScript('//connect.facebook.net/en_US/all.js', function(){
                             FB.init({
@@ -199,8 +199,7 @@ function boeInit()
  /* boeConfig changes some boeSettings after resize event; also called once after boeInit, called from jQ ready */
 function boeConfig()
 {  	 
- 
-  if($.boeSettings.videoOpen)
+   if($.boeSettings.videoOpen)
 	     $.boeSettings.videoResize();
 	 $('.nav').myspasticNav();
 	 $('.nav li:last-child').prev().css('margin-right','0'); 
@@ -293,6 +292,7 @@ function sizeButtonBannerPage()
 	       distanceToMoveLastButton= ($.boeSettings.accordionButtons.length-1)*($.boeSettings.buttonBottomMargin+$.boeSettings.buttonHeight)+($.boeSettings.topBannerHeight+$.topBannerHeight+$.boeSettings.initButtonOffset);      
 	       return (unusedWindow+distanceToMoveLastButton);
 }
+/*gives a video screen that fits according to 16/9 ratio returns an object with height and width */
 
 function videoDimensions(wH,wW)
  { 
@@ -317,31 +317,31 @@ function videoDimensions(wH,wW)
            return {"height":height,"width":width};        
  } 
  
+ /* calculate how far button is from the "top"; used when deferred objects haven't yet updated on a closing content page, so promButtonDomReady polls 
+  * with this function
+  */
 function calcButtonTopOffset($button)
 {
    return    $.boeSettings.resetButtonsAdjustment + 
-                ($button.data("order")-1) * 107 ;  /* button height + buttonBottomMargin */
-/*walker don't like 107 fixed get calc */ 
+                (($button.data("order")-1) * ($.boeSettings.buttonHeight+$.boeSettings.buttonBottomMargin));
 }
 function videoWrapperTop(index)
 {    var topV =   (index * ( $.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin  ) ) + $.boeSettings.buttonHeight ;
      return topV;
 }
 
-
-
 /* scroll routines */
-
 /* titlesForScroll  called after boeConfig which is to say after a resize event. 
   * titlesForScroll toggles visibility of header picture depending upon scroll position. menuDark is dark menu on lighter background photo. Scroll changes to
   * darker background image in header and thus lightMenu, offwhite menu elements
-  *  */
+  * 
+   */
 function titlesForScroll()
 {   
-   var menuDark = $.boeSettings.navAnchors.hasClass("darkmenu")
+   var menuDark = $.boeSettings.navAnchors.hasClass("darkmenu");
    if ($.boeSettings.desktop)   		 		
    {  	if( menuDark && $.boeSettings.doc.scrollTop() > 110 ) 
-     	{  	    $.boeSettings.navAnchors.removeClass("darkmenu")
+     	{  	    $.boeSettings.navAnchors.removeClass("darkmenu");
       			$.boeSettings.topBannerHeader.addClass('showbg');
       			$.boeSettings.topBanner.addClass("showbackground");
      			$.boeSettings.navAnchors.addClass("lightmenu");
@@ -389,11 +389,18 @@ function scrollToMark($target, adjustment)
  
 /* showButtons if version is mobile and using button navigation*/ 
  function showButtons()
-{
-	$.boeSettings.accordionButtons.show();
+{	$.boeSettings.accordionButtons.show();
 }
 
 /* full featured navigation routines -- menu */
+/* handleMenuRequest on menu anchor click event
+ /* all anchors except HOME are sent to a hash that is the name of the content section, HOME on the other hand is id=mytopButton"
+  * if target is home and nothing is current do nothing
+  * if current open menu item content is selected do nothing
+  * if target is a content section (".accordionContent") then assign new prefix to nextPrefix and assign current content
+  * old button is what was current going in (could be null); if video open from existing content, then close it and restore icons else skip that step and handle
+  * the menu request by calling showContentFromMenu
+ * */
 function handleMenuRequest($target)  
 { 
 var $oldButton,
@@ -415,7 +422,7 @@ $oldButton = $(".accordionButton.current");
 if ($.boeSettings.videoOpen)
  {
   	      p1=promVideoClose(50);
- 	      p2 =p1.then(function(){ return (promFadeHide($oldButton,50))} );
+ 	      p2 =p1.then(function(){ return (promFadeHide($oldButton,50));} );
           return ( p2.then(function(){  restoreButtonToDisplayPosition($oldButton);
           	                                             $.boeSettings.currentPrefix = $.boeSettings.nextPrefix;
           	                                             showContentFromMenu($target,true);                     
@@ -427,6 +434,12 @@ if ($.boeSettings.videoOpen)
        	  return (showContentFromMenu($target)  );
        }
 }	
+/* called from desktop mode via click on 'badge_icon_container' class attached to 'accordionButton'  section
+ * if video open, then the clicked icon is set adjacent to the video player screen, so restore button to display position (in content section)
+ * also close the video
+ * if opening video then move the badge_icon_container to be adjacent to the video player screen
+ * in any case, we want to fade out the button and fade back in after button has been moved
+ */
 function handleMenuIconRequest($target)
 {
 	   var newPrefix = $target.attr("id").substr(0,3),
@@ -446,12 +459,23 @@ function handleMenuIconRequest($target)
    	 p2= p1.then(function(){ return vidToggle(150);});
    	return ( p2.then(function(){	iconLoc($button); 
    			                                    	$.boeSettings.currentPrefix = $.boeSettings.nextPrefix;
-   			                                     	return promFadeShow($button) }
+   			                                     	return promFadeShow($button);}
    			                                     	));
 }
+/* called from handleMenuRequest. will show content that is in $target (a section with class=accordionContent); 
+ * @forceQuick boolean to close faster due to being called from content with video open (and therefore requring an extra step)
+ *  here badge is a container for an icon and a title. The icon is either a video launch icon or a return to text (close video) icon 
+ * 
+ *  first time in both badge and content are nil so just show the target content and then take the target's sibling :prev() which is the badge and mark it current
+ *  in with open current: unmark content section and if video open, unmark as current  badge; hide badge and current; other wise no video, just hide current
+ *  if target is NOT accordionContent class ie HOME, then scroll the content closed and exit
+ *  if open content then p2 waits for it to fade to hide before showing target, else target shows immediately
+ *  then mark target as current, acquire badge and wait for process to update DOM; then scroll to Mark ie scroll content to top of position under heading.
+ *  finally with new content displayed mark badge as current and with deskshow class (for position) this fades icon badge into view (for calling video)
+ *  */
 function showContentFromMenu($target,forceQuick)
 {
-	if ($target.hasClass("current"))  /* target is now an accordionContent class element */
+	if ($target.hasClass("current"))  /* target is current accordionContent class element */
 	    return null;
 	
     var $badge = $(".accordionButton.current"),
@@ -459,7 +483,12 @@ function showContentFromMenu($target,forceQuick)
           $currentBadge,
           contentA=400,
           contentH=400,
-          p1,p2,p3,p4,p5,lastPromise;
+          p1,p2,p3,p4,p5,lastPromise;  
+          /* process variables from deferred objects so that processing goes synchrously*/
+          /* p1=hidebadge;p2=hideContent;p3=show target;
+          * 
+          * p4=wait for changes to update in DOM;p5=scrollToMark;p6=update badge to show in desktop version and mark current
+          */
 	
 	if (forceQuick)
 	{
@@ -467,14 +496,14 @@ function showContentFromMenu($target,forceQuick)
 	    contentH=50;   
 	}
 	
-	$content.removeClass("current");	
+	$content.removeClass("current");	/*unlabel current content section*/
 	if ( $badge.length)                           /* here only processing badges that link to video */
 	{   $badge.removeClass("current");
-        p1 = promFadeHide($badge)
-        p2 = p1.then(function(){return promFadeHide($content)});     
+        p1 = promFadeHide($badge);
+        p2 = p1.then(function(){return promFadeHide($content);});     
 	 
     }
-    else
+    else  
 	{   
 		if ($content.length)
 		{  
@@ -483,23 +512,28 @@ function showContentFromMenu($target,forceQuick)
 	}
    if ( !$target.hasClass("accordionContent"))  /* NOT has class */
    { 
-            return( p2.then(function(){return promScrollToMark($target)  }) );	  
+            return( p2.then(function(){return promScrollToMark($target); }) );	  
    }
    else
    {  if (p2) 
-           p3=p2.then(function(){return promFadeShow($target)});
+           p3=p2.then(function(){return promFadeShow($target);});
      else p3 = promFadeShow($target);
      p4 = p3.then(function(){ $target.addClass("current");
      										  $currentBadge= $target.prev();
-     										  return promDomReady($content,$target)});
-     p5=p4.then(function(){return promScrollToMark($target)});	
+     										  return promDomReady($content,$target);});
+     p5=p4.then(function(){return promScrollToMark($target);});	
      p6 = p5.then(function(){if ($currentBadge.hasClass("deskshow"))
      	                                        {  $currentBadge.addClass("current");
-                                                    return promFadeShow($currentBadge,300) 	
-     	                                         }  });
+                                                    return promFadeShow($currentBadge,300); 	
+     	                                         }});
      return p6;
     }
  }
+ 
+ /* when in desktop mode, moves badge_icon_contaiiner to be adjacent to the just opened video screen
+  * toggle to make the icon show a face indicating it will return the content to text
+  * remove [pre-fix]+"display" class because it has just  called video display; then set top and left dimensions
+  */
  function moveButtonToVideoPosition($button)
 {     makeIconText($button);
 	  var classOut = $button.attr("id").substr(0,3) + "-display",
@@ -508,18 +542,23 @@ function showContentFromMenu($target,forceQuick)
 	  leftShift=Math.max(leftShift,15);
 	  $button.removeClass(classOut).css("left",leftShift+"px").css("top","125px");
 }
+/*
+ * make current text calling badge_icon_container as a video invoking badge. Attach class of [prefix]+"display"
+ * 
+ * */
 function restoreButtonToDisplayPosition($button)
 {   
 	makeIconVideo($button);
 	var classIn = $button.attr("id").substr(0,3) + "-display";
 	$button.css("left","").css("top","").addClass(classIn);
 }
+/* change icon image source*/
 function makeIconVideo($button)
 {
 	var iconImg = $button.find(".iconlink a img");
 	 iconImg.attr("src","img/videoIcon.png");
 }
-
+/*change icon image source*/
 function makeIconText($button)
 {
 	var iconImg = $button.find(".iconlink a img");
@@ -546,7 +585,7 @@ function handleButtonRequest($target)
 	if ($target.hasClass("badge_icon_container") )
 	{ vidDef = handleButtonIconForContent($button, newSection);
 	  vidDef.then(function(){if ($.boeSettings.videoOpen && !$.boeSettings.desktop)
-			                                     scrollToMark($button,$.boeSettings.topBannerHeight-$.boeSettings.buttonHeight-10)});
+			                                     scrollToMark($button,$.boeSettings.topBannerHeight-$.boeSettings.buttonHeight-10);});
 	}
     $.boeSettings.currentPrefix = $.boeSettings.nextPrefix;
  } 
@@ -571,13 +610,13 @@ function handleButtonIconForContent($button)
 	}
 	if ($.boeSettings.videoOpen)   /* this closes the current video and content section */
 	{    p1= buttonClearVideo($oldButton);
-	     p2=p1.then(function(){ return showContentButtonsAndScroll($button,true) } );
+	     p2=p1.then(function(){ return showContentButtonsAndScroll($button,true); } );
 	     return p2.then(function(){ makeIconText($button);hideContentUnderVideo();
-	                                                return promVideoOpen() });
+	                                                return promVideoOpen();});
    }
     p1= showContentButtonsAndScroll($button);
  	return (  p1.then(function(){ makeIconText($button);hideContentUnderVideo();
- 	                                               return promVideoOpen()} )) ;
+ 	                                               return promVideoOpen();} )) ;
 }   
 function handleButtonLabelForContent($button)
 {    var  $oldButton = $(".accordionButton.current"),
@@ -630,15 +669,15 @@ function showContentButtonsAndScroll($target,flagRapid)   /* $target is section 
 	 	$button.removeClass("current");
     
       p1 = promFadeHide($content,contentAnimateDelay,contentHideDelay);
-      p2 = p1.then( function(result){ return ( promButtonDomReady($target))} );
-      p3= p2.then( function(result){ return  promFadeShow($newContent,true) });
+      p2 = p1.then( function(result){ return ( promButtonDomReady($target));} );
+      p3= p2.then( function(result){ return  promFadeShow($newContent,true);});
        
       return p3.then(function(result){ return promScrollToMark($target);} );	                                    
       }    		                       																	
 	 else
 	 {         	  
       	 p1=  promFadeShow($newContent,true);
-         return  (p1.done(function(){return promScrollToMark($target)}));
+         return  (p1.done(function(){return promScrollToMark($target);}));
      } 
  }
 
@@ -778,13 +817,13 @@ function promVideoOpen(d_lay)
    	           		 	    {    
    	           		 	    	 if (conBar.hasClass("vjs-lock-showing"))  
    	           		 	    	 { thePlayer.play();}
-   	           		 	    	 else {   conBar.removeClass("vjs-lock-showing") 
+   	           		 	    	 else {   conBar.removeClass("vjs-lock-showing");
    	           		 	    	 	         conBar.addClass("vjs-fade-in");
    	           		 	                     setTimeout(function(){conBar.addClass("vjs-fade-out");},100);
    	           		 	                 }
    	           		 	     }
    	            }            
-   	           promFadeShow($vidCont,delay).then(function(){dfr.resolve() });
+   	           promFadeShow($vidCont,delay).then(function(){dfr.resolve();});
      }).promise();
  }
 function promVideoClose(d_lay)
@@ -798,7 +837,7 @@ function promVideoClose(d_lay)
     	/*thePlayer.pause();*/   thePlayer.src("");
         $(".vjs-play-control").removeClass("vjs-playing").addClass("vjs-paused");
     	$(".vjs-control-bar").addClass("vjs-lock-showing");
-  	    promFadeHide($("#videocontainer"),dlay).then(function(){dfr.resolve() });
+  	    promFadeHide($("#videocontainer"),dlay).then(function(){dfr.resolve();});
   	    $.boeSettings.videoOpen=false;
   	    thePlayer.height(10).width(10);  
       }).promise();
@@ -808,7 +847,7 @@ function promVideoClose(d_lay)
 function showContentUnderVideo()
   {
   	var cText = "#"+ $.boeSettings.nextPrefix + "-text",
- 	       cBack="#"+ $.boeSettings.nextPrefix+"-bg"
+ 	       cBack="#"+ $.boeSettings.nextPrefix+"-bg";
    	$(cText).removeClass("makeinvisible");
    	$(cBack).removeClass("makeinvisible");
   }
