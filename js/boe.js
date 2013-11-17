@@ -566,6 +566,15 @@ function makeIconText($button)
 }
 
 /* mobile and pad related navigation via "buttons"   */
+/* called from a badge_container_icon, badge_container_title, and just the containing accordionButton as well 
+ * target is going to be an accordionContent section, so the calling button is determined by the closest accordionButton; it cannot be just a sibling because
+ * the aboutFilm content section has an additonal div wrapper.
+ * determine what the new Prefix will be and see if this target is different from what is currently open
+ * whether is new or not passed as parameter to  handleButtonIconForContent
+ * once button is acquired then currentContent set as next sibling to button
+ * if target is badge_title container or accordionButton, call handleButtonLableForContent; for a badge_icon_container call handleButtonIconForContent
+ * finally set global currentPrefix as newPrefix 
+ * */
 function handleButtonRequest($target)
 {	
 	var $button = $target.closest(".accordionButton"),
@@ -589,6 +598,13 @@ function handleButtonRequest($target)
 	}
     $.boeSettings.currentPrefix = $.boeSettings.nextPrefix;
  } 
+ /*
+  * handleButtonIconForContent
+  * if has a current open accordionButton and the target is the same, then if videoOpen clear the video; ie clicking on the icon will keep content open but
+  * toggle video and text (text being under video so closing video reveal text)
+  * if a different prefix then if video is open, close it and then call showContentButtonsAndScroll with a boolean to force the a quicker action
+  * otherwise, just call showContentButtonsANdScroll
+  */
 function handleButtonIconForContent($button)
 {
 	var  $oldButton = $(".accordionButton.current"),
@@ -618,6 +634,10 @@ function handleButtonIconForContent($button)
  	return (  p1.then(function(){ makeIconText($button);hideContentUnderVideo();
  	                                               return promVideoOpen();} )) ;
 }   
+/* open text content of accordionContent class
+ * if video was open in previous open close it.
+ * in either case call showContentButtonsAndScroll
+ */
 function handleButtonLabelForContent($button)
 {    var  $oldButton = $(".accordionButton.current"),
 	          p1,p2,p3;
@@ -627,7 +647,16 @@ function handleButtonLabelForContent($button)
 	 }
      return ( showContentButtonsAndScroll($button) );
 } 
-
+/*
+ * showContentButtonsAndScroll
+ * $target of accordionButton starts it. @flagRapid is for open videos, flags hiding open content to proceed faster because the closing video adds an extra step.
+ * See if target associated content is same as section open. If so, just close the section and scroll the buttons up to reset point
+ * If target is not associated then is new change icon title text color to indicate it is chosen; remove current class from current and assign to new making new current
+ * if not first time in (so now current content) then double content hide transition time if new choice is further down screen from current. This is because further down
+ * means hiding item above it will make a "hole" in the flow. and don't want it to JUMP at this point
+ * so hide old content, check the DOM then show new content and scroll to Mark
+ * IF FIRST TIME IN just show new content and scroll to Mark
+ * */
 function showContentButtonsAndScroll($target,flagRapid)   /* $target is section with class of accordionButton */
 {	
 	var $button = $(".accordionButton.current");
@@ -683,6 +712,8 @@ function showContentButtonsAndScroll($target,flagRapid)   /* $target is section 
 
 /* deferred / promise routines */
 /* full featured menu related deferred/promise routines */
+/* promFadeShow wraps a fadein show() routine in a defered/promise object so that fading show is not jumped over */
+
 function promFadeShow($targ,aniDur)
 {    var $self=$targ;
 	 var aDuration = aniDur || 400;
@@ -696,6 +727,7 @@ function promFadeShow($targ,aniDur)
 	
 	}).promise();
 }
+/* deferred/promise wrapped hide */
 function promFadeHide($targ,aniDur,hideDur)
 {
 	var aDuration = aniDur || 400;
@@ -706,7 +738,9 @@ function promFadeHide($targ,aniDur,hideDur)
 		$self.animate({"opacity":0},aDuration).hide(hDuration,function(){dfr.resolve("HIDE DONE");});   
 	}).promise();
 } 
-
+/* changes wrought by hiding an element propagate after some delay. This polls the DOM to make sure the change is known and
+ * therefore subsequent scrolling dimensions are accurate */
+ 
 function promDomReady($cont,$targ)
  {
  	    var $content = $cont;
@@ -742,7 +776,7 @@ function promDomReady($cont,$targ)
  		 	            }  
  		 	  }).promise();
 }	   
-
+/* polling for DOM ready when the mobile button driven screen is used */
 function promButtonDomReady($targ)
 { 
       var $target=$targ,
@@ -773,7 +807,7 @@ function promButtonDomReady($targ)
  	         timeOut=setTimeout(checkDom,100);
     }
 }
-
+/* wraps scroll to Mark in a deferred/promise so that subsequent actions don't step on the scrolling and the scrolling can be dimensionally accurate */
 function promScrollToMark($targ,adj)
 {   var $target = $targ;
 	var adjustment = adj;
@@ -784,6 +818,7 @@ function promScrollToMark($targ,adj)
 		scrollToMark($target,adjustment);
     }).promise();
 }
+/*video open wrapped in a deferred/promise */
 function promVideoOpen(d_lay)
 {
    var  delay = d_lay || 400;
@@ -826,6 +861,7 @@ function promVideoOpen(d_lay)
    	           promFadeShow($vidCont,delay).then(function(){dfr.resolve();});
      }).promise();
  }
+ /* video close wrapped in a deferred/promise */
 function promVideoClose(d_lay)
 {
 	var dlay = d_lay || 400,
@@ -844,6 +880,9 @@ function promVideoClose(d_lay)
  } 
  
  /* video routines */
+/* want to hide and reveal content under the video player page. When video palying, don't want text showing under (but don'e want player page to have to be
+ * as large as text page
+ */
 function showContentUnderVideo()
   {
   	var cText = "#"+ $.boeSettings.nextPrefix + "-text",
