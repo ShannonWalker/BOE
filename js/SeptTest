@@ -33,12 +33,12 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
        																									$.screenIn();
         																							}   
      												 											}	
-                                          														},100); };
+                                          														},100); }
 	 $.ajaxSetup({ cache: true });
      $.getScript('//connect.facebook.net/en_US/all.js', function(){
                             FB.init({
-                                        appId: '1419525251598984',
-                                        channelUrl: '//www.burdenofeden.com/channel.html',
+                                        appId: '178817018969144',
+                                        channelUrl: '//www.burdenofeden.com/testing/channel.html',
                                         status     : true,                                 // Check Facebook Login status
                                         xfbml      : true     
                                       });
@@ -109,11 +109,18 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
 	 $(window).afterResize(boeConfig,false,150); 
 	 
 });
-
+function dumpProperties()
+{
+	var obj = $.boeSettings;
+	for(var propt in obj){
+         console.log(propt + ': ' + obj[propt]);
+    }
+}
+function checkClass( obj)
+{
+    return Object.prototype.toString.call( obj ).slice( 8, -1).toLowerCase();
+}
 /* configuration routines */
-/* boeInit called once in JQuery ready. Sets up boeSettings variables. Also determines pixel density and pixel ratio used to determine if display should be
- * for a mobile device or a desktop
- */
 function boeInit()
 {         
 	var   $buttons= $('.accordionButton'),
@@ -139,6 +146,7 @@ function boeInit()
 	   	       "windowWidth":  $(window).width(),
 	   	       "screenHeight": window.screen.height,
 	   	       "screenWidth": window.screen.width,
+	   	       "cssScreenWidth":window.screen.width,
 	   	       "topBannerHeight":$(".topbanner").height(),
 	   	       "homeBannerHeight":$(".banner.home > div").height(),
 	   	       "buttonHeight":  butHeight,
@@ -152,12 +160,16 @@ function boeInit()
 	   	       "fbHeight":20,
 	   	       "fbWidth":75,
 	   	       "desktop":false,
+	   	       "devicePixelRatio":1,
+	   	       "deviceAspectRatio":1.0,
 	   	       "unsupported": unsupported,
 	   	       "iPad":!!iPad, 
 	   	       "iPhone":!!iPhone,
 	   	       "iOS":!!iOS,
 	   	       "mobile":false,
 	   	       "android":!!android,
+	   	       "videoHeight":0,
+	   	       "videoWidth":0,
 	   	       "videoOpen":false,
 	   	       "videoResize":null,
 	   	       "videoDesktopIconWidth":0,
@@ -173,7 +185,27 @@ function boeInit()
 	   	       "his":{"buttonPosition":0,"poster":"img/His-Poster.jpg","vidsrc":[ { type: "video/mp4", src: "video/History.mp4" }, { type: "video/webm", src: "video/History.webm" },
                                                                                       { type: "video/ogg", src: "video/History.ogv" }] }
 	 };
-      if (settings.screenWidth < 768) /*indicate Small video src*/
+ 
+     var dpr=window.devicePixelRatio;
+	 if (dpr)
+	 {
+	 	settings.devicePixelRatio = dpr; 
+	 }
+     
+     if (window.matchMedia)
+     {
+     	if (window.matchMedia("(max-device-aspect-ratio:9/10)").matches)
+     	    settings.deviceAspectRatio = 0.5;
+     }
+    else { //not happy with this but only an issue with IE and small segment browsers
+                 settings.deviceAspectRatio = window.screen.width/window.screen.height; 
+            }
+    if (settings.deviceAspectRatio >= 1.0)
+        $("body").css("min-width","769px"); 
+    else
+        $("body").css("max-width","1025px");      
+     
+     if (settings.screenWidth < 768) /*indicate Small video src*/
      { 
      	var vidPropArray = [settings.com.vidsrc,settings.des.vidsrc,settings.his.vidsrc],
               limit = vidPropArray.length,
@@ -196,10 +228,10 @@ function boeInit()
 	 });
 	return settings;
 }
- /* boeConfig changes some boeSettings after resize event; also called once after boeInit, called from jQ ready */
 function boeConfig()
 {  	 
-   if($.boeSettings.videoOpen)
+  $.boeSettings.desktop = ($.boeSettings.deviceAspectRatio >= 1.0 || ($(window).width() > 1024) );
+  if($.boeSettings.videoOpen)
 	     $.boeSettings.videoResize();
 	 $('.nav').myspasticNav();
 	 $('.nav li:last-child').prev().css('margin-right','0'); 
@@ -237,6 +269,7 @@ function boeConfig()
 	         				   $.boeSettings.buttonGroupAdjustment = 0;
 	                    	   $.boeSettings.scrollToMarkAdjustment=0;
 	                    	   sizeBannersAndPagesMobile(); 
+	                    	 
 	             			} 	
 		      }
 	 if ($.boeSettings.videoOpen)
@@ -251,97 +284,17 @@ function boeConfig()
 	 		else
 	 		{  
 	 	   		hideTitlesForScroll();
+	 	   		showButtons();
 	 		}
 	 }
 } 
-/*sizing routines */
-/* sizeBannerAndPagesDesktop, the home banner which is where the main titles screen displays in desktop mode. Home banner is set to the hight of the
-   viewport . bannerHomeDiv contains the maintitles, so that div is padded on top with half of the difference between the titles height and the window height
-   bannerPages is where an opened "page" such as sections for History, Design, etc is shown. So an open page has a min height of the  viewport
-   as does the content wrapper for each of these sections
-  */ 
-function sizeBannersAndPagesDesktop(){
-		var wH = $.boeSettings.windowHeight; 
-        $.boeSettings.bannerHome.css( "height", wH + "px");
-        $.boeSettings.bannerHomeDiv.css("padding-top", parseInt((wH - $.boeSettings.homeBannerHeight) / 2)); 
-        $.boeSettings.bannerPages.css("min-height",wH + "px");
-        $(".accordionContent [id*='-wrapper']").css("min-height",wH+"px" ); 
-}
-function sizeBannersAndPagesIPad(){
-	 var contentMinHeight = 1024,
-	        bannerHomeHeight = $.boeSettings.topBannerHeight + $.boeSettings.initButtonOffset,
-	        pageH=sizeButtonBannerPage();
-	   $.boeSettings.bannerPages.css("min-height",pageH +"px"); 
-       $.boeSettings.bannerHome.css( "height", bannerHomeHeight + "px");  
-       /*$(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );  */
-       $.boeSettings.bannerHomeDiv.css('padding-top', 0 ); 
- }
- 
-function sizeBannersAndPagesMobile() {
-   var pageH = sizeButtonBannerPage(),
-   contentMinHeight = 400;
- $.boeSettings.bannerPages.css("min-height",pageH +"px");  
- $.boeSettings.bannerHome.css( "height",$.boeSettings.initButtonOffset + "px");  
- $(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );  /*$.boeSettings.topBannerHeight + $.boeSetttings.initButtonOffset*/
- $.boeSettings.bannerHomeDiv.css('padding-top', 0 );    
-}
-
-function sizeButtonBannerPage()
-{
-	var unusedWindow= $.boeSettings.windowHeight - $.boeSettings.scrollToMarkAdjustment+$.boeSettings.initButtonOffset,
-	       distanceToMoveLastButton= ($.boeSettings.accordionButtons.length-1)*($.boeSettings.buttonBottomMargin+$.boeSettings.buttonHeight)+($.boeSettings.topBannerHeight+$.topBannerHeight+$.boeSettings.initButtonOffset);      
-	       return (unusedWindow+distanceToMoveLastButton);
-}
-/*gives a video screen that fits according to 16/9 ratio returns an object with height and width */
-
-function videoDimensions(wH,wW)
- { 
- 	var aspectRatio=16/9,
-           inverseAspectRatio = 9/16,
-           sideSpace,
-           width=wW,height=wH,
-           docWidth = $.boeSettings.doc.width();
-           if($.boeSettings.desktop)
-           {  width= wH * aspectRatio; 
-              if  ( (width + $.boeSettings.videoDesktopIconWidth) >  docWidth )
-              {   width = docWidth - $.boeSettings.videoDesktopIconWidth-20; /*20 for scroll bar */
-                  height = width * inverseAspectRatio;
-              }
-           }
-           else {  /* tablets just take the max width and work from there */
-                       height=width * inverseAspectRatio;
-                       if (wH < height)
-                       {     width = wH*aspectRatio;
-                            height=width * inverseAspectRatio; }
-                  }
-           return {"height":height,"width":width};        
- } 
- 
- /* calculate how far button is from the "top"; used when deferred objects haven't yet updated on a closing content page, so promButtonDomReady polls 
-  * with this function
-  */
-function calcButtonTopOffset($button)
-{
-   return    $.boeSettings.resetButtonsAdjustment + 
-                (($button.data("order")-1) * ($.boeSettings.buttonHeight+$.boeSettings.buttonBottomMargin));
-}
-function videoWrapperTop(index)
-{    var topV =   (index * ( $.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin  ) ) + $.boeSettings.buttonHeight ;
-     return topV;
-}
-
 /* scroll routines */
-/* titlesForScroll  called after boeConfig which is to say after a resize event. 
-  * titlesForScroll toggles visibility of header picture depending upon scroll position. menuDark is dark menu on lighter background photo. Scroll changes to
-  * darker background image in header and thus lightMenu, offwhite menu elements
-  * 
-   */
 function titlesForScroll()
-{   
-   var menuDark = $.boeSettings.navAnchors.hasClass("darkmenu");
+{      
+   var menuDark = $.boeSettings.navAnchors.hasClass("darkmenu")
    if ($.boeSettings.desktop)   		 		
    {  	if( menuDark && $.boeSettings.doc.scrollTop() > 110 ) 
-     	{  	    $.boeSettings.navAnchors.removeClass("darkmenu");
+     	{  	    $.boeSettings.navAnchors.removeClass("darkmenu")
       			$.boeSettings.topBannerHeader.addClass('showbg');
       			$.boeSettings.topBanner.addClass("showbackground");
      			$.boeSettings.navAnchors.addClass("lightmenu");
@@ -358,9 +311,6 @@ function titlesForScroll()
               	 }  
         }
 }
-/* if configured for a mobile browser, this will hide the titles that show as part of the home banner section. They are suppressed because the mobile
- * configuration will have navigation buttons over that portion of the screen
- */
 function hideTitlesForScroll()
 {
 	$.boeSettings.bigFilmTitle.hide();
@@ -368,39 +318,75 @@ function hideTitlesForScroll()
 	$.boeSettings.topBannerHeader.addClass("showbg").fadeIn();
 	showButtons();
 }
-/*
- * scrollToMark takes elements position in the document and scrolls to the top of the document less an adjustment.
- * The adjustment is either a boeSetting, scrollToMarkAdjustment  which adjusts how an element ""slides up"  in a mobile environment or
- * @adjustment is a parameter indicating returning a button menu group to an offset, therefore when an "open"" button is closed the adjustment parameter
- * puts the button and the group it is in, back to the proper offset from the top of the document
- * 
- * scrollToMark is mostly called within a promScrollToMark wrapper that makes the scrolling an action of a deferred object so that the scrolling completes before  
- * subsequent actions are executed
- * Called in: initialization in JQ ready when the home banner is loaded [dektop version only]
- * showContent FromMenu, handleButtonRequest, showContentButtonForScroll
- * scrolling is set to go faster if closing a video (because there is an extra step after the video page closes)
- */
 function scrollToMark($target, adjustment)
 {   var a = adjustment || $.boeSettings.scrollToMarkAdjustment,  
 	      scrollSpeed = $.boeSettings.videoOpen?1200:500,
           topDestination = $target.offset().top-a; 
           $('body,html').animate({scrollTop: topDestination }, scrollSpeed);
  } 
- 
-/* showButtons if version is mobile and using button navigation*/ 
  function showButtons()
-{	$.boeSettings.accordionButtons.show();
+{$.boeSettings.accordionButtons.show();
 }
-
+/*sizing routines */
+function sizeBannersAndPagesDesktop(){
+		var wH = $.boeSettings.windowHeight; 
+        $.boeSettings.bannerHome.css( "height", wH + "px");
+        $.boeSettings.bannerHomeDiv.css("padding-top", parseInt((wH - $.boeSettings.homeBannerHeight) / 2)); 
+        $.boeSettings.bannerPages.css("min-height",wH + "px");
+        $(".accordionContent [id*='-wrapper']").css("min-height",wH+"px" ); 
+}
+function sizeBannersAndPagesIPad(){
+	 var contentMinHeight = 1024,
+	        bannerHomeHeight = $.boeSettings.topBannerHeight + $.boeSettings.initButtonOffset,
+	       pH = 2* (bannerHomeHeight - $.boeSettings.buttonHeight + 
+	                           ($.boeSettings.accordionButtons.length * ( $.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin))); 
+	   $.boeSettings.bannerPages.css("min-height",pH +"px"); 
+       $.boeSettings.bannerHome.css( "height", bannerHomeHeight + "px");  
+       /*$(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );  */
+       $.boeSettings.bannerHomeDiv.css('padding-top', 0 ); 
+ }
+function sizeBannersAndPagesMobile() {
+   var ph = 2*($.boeSettings.topBannerHeight + $.boeSettings.initButtonOffset+ 
+   ( ($.boeSettings.accordionButtons.length) * ($.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin) ) - $.boeSettings.buttonBottomMargin),
+   contentMinHeight = 400;
+ $.boeSettings.bannerPages.css("min-height",ph +"px");  
+ $.boeSettings.bannerHome.css( "height",$.boeSettings.initButtonOffset + "px");  
+ $(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );  /*$.boeSettings.topBannerHeight + $.boeSetttings.initButtonOffset*/
+ $.boeSettings.bannerHomeDiv.css('padding-top', 0 );    
+}
+function videoDimensions(wH,wW)
+ { console.log(wH+" "+wW);
+ 	var aspectRatio=16/9,
+           inverseAspectRatio = 9/16,
+           sideSpace,
+           width=wW,height=wH; 
+           if($.boeSettings.desktop)
+           {  width= wH * aspectRatio; 
+              if  ( (width + $.boeSettings.videoDesktopIconWidth) >  document.documentElement.clientWidth)
+              {   width = document.documentElement.clientWidth - $.boeSettings.videoDesktopIconWidth-20; /*20 for scroll bar */
+                  height = width * inverseAspectRatio;
+              }
+           }
+           else {  /* tablets just take the max width and work from there */
+                       height=width * inverseAspectRatio;
+                       if (wH < height)
+                       {     width = wH*aspectRatio;
+                            height=width * inverseAspectRatio; }
+                  }
+           return {"height":height,"width":width};        
+ } 
+ 
+function calcButtonTopOffset($button)
+{
+   return    $.boeSettings.resetButtonsAdjustment + 
+                ($button.data("order")-1) * 107 ;  /* button height + buttonBottomMargin */
+/*walker don't like 107 fixed get calc */ 
+}
+function videoWrapperTop(index)
+{    var topV =   (index * ( $.boeSettings.buttonHeight + $.boeSettings.buttonBottomMargin  ) ) + $.boeSettings.buttonHeight ;
+     return topV;
+}
 /* full featured navigation routines -- menu */
-/* handleMenuRequest on menu anchor click event
- /* all anchors except HOME are sent to a hash that is the name of the content section, HOME on the other hand is id=mytopButton"
-  * if target is home and nothing is current do nothing
-  * if current open menu item content is selected do nothing
-  * if target is a content section (".accordionContent") then assign new prefix to nextPrefix and assign current content
-  * old button is what was current going in (could be null); if video open from existing content, then close it and restore icons else skip that step and handle
-  * the menu request by calling showContentFromMenu
- * */
 function handleMenuRequest($target)  
 { 
 var $oldButton,
@@ -422,7 +408,7 @@ $oldButton = $(".accordionButton.current");
 if ($.boeSettings.videoOpen)
  {
   	      p1=promVideoClose(50);
- 	      p2 =p1.then(function(){ return (promFadeHide($oldButton,50));} );
+ 	      p2 =p1.then(function(){ return (promFadeHide($oldButton,50))} );
           return ( p2.then(function(){  restoreButtonToDisplayPosition($oldButton);
           	                                             $.boeSettings.currentPrefix = $.boeSettings.nextPrefix;
           	                                             showContentFromMenu($target,true);                     
@@ -434,12 +420,6 @@ if ($.boeSettings.videoOpen)
        	  return (showContentFromMenu($target)  );
        }
 }	
-/* called from desktop mode via click on 'badge_icon_container' class attached to 'accordionButton'  section
- * if video open, then the clicked icon is set adjacent to the video player screen, so restore button to display position (in content section)
- * also close the video
- * if opening video then move the badge_icon_container to be adjacent to the video player screen
- * in any case, we want to fade out the button and fade back in after button has been moved
- */
 function handleMenuIconRequest($target)
 {
 	   var newPrefix = $target.attr("id").substr(0,3),
@@ -459,23 +439,12 @@ function handleMenuIconRequest($target)
    	 p2= p1.then(function(){ return vidToggle(150);});
    	return ( p2.then(function(){	iconLoc($button); 
    			                                    	$.boeSettings.currentPrefix = $.boeSettings.nextPrefix;
-   			                                     	return promFadeShow($button);}
+   			                                     	return promFadeShow($button) }
    			                                     	));
 }
-/* called from handleMenuRequest. will show content that is in $target (a section with class=accordionContent); 
- * @forceQuick boolean to close faster due to being called from content with video open (and therefore requring an extra step)
- *  here badge is a container for an icon and a title. The icon is either a video launch icon or a return to text (close video) icon 
- * 
- *  first time in both badge and content are nil so just show the target content and then take the target's sibling :prev() which is the badge and mark it current
- *  in with open current: unmark content section and if video open, unmark as current  badge; hide badge and current; other wise no video, just hide current
- *  if target is NOT accordionContent class ie HOME, then scroll the content closed and exit
- *  if open content then p2 waits for it to fade to hide before showing target, else target shows immediately
- *  then mark target as current, acquire badge and wait for process to update DOM; then scroll to Mark ie scroll content to top of position under heading.
- *  finally with new content displayed mark badge as current and with deskshow class (for position) this fades icon badge into view (for calling video)
- *  */
 function showContentFromMenu($target,forceQuick)
 {
-	if ($target.hasClass("current"))  /* target is current accordionContent class element */
+	if ($target.hasClass("current"))  /* target is now an accordionContent class element */
 	    return null;
 	
     var $badge = $(".accordionButton.current"),
@@ -483,12 +452,7 @@ function showContentFromMenu($target,forceQuick)
           $currentBadge,
           contentA=400,
           contentH=400,
-          p1,p2,p3,p4,p5,lastPromise;  
-          /* process variables from deferred objects so that processing goes synchrously*/
-          /* p1=hidebadge;p2=hideContent;p3=show target;
-          * 
-          * p4=wait for changes to update in DOM;p5=scrollToMark;p6=update badge to show in desktop version and mark current
-          */
+          p1,p2,p3,p4,p5,lastPromise;
 	
 	if (forceQuick)
 	{
@@ -496,14 +460,14 @@ function showContentFromMenu($target,forceQuick)
 	    contentH=50;   
 	}
 	
-	$content.removeClass("current");	/*unlabel current content section*/
+	$content.removeClass("current");	
 	if ( $badge.length)                           /* here only processing badges that link to video */
 	{   $badge.removeClass("current");
-        p1 = promFadeHide($badge);
-        p2 = p1.then(function(){return promFadeHide($content);});     
+        p1 = promFadeHide($badge)
+        p2 = p1.then(function(){return promFadeHide($content)});     
 	 
     }
-    else  
+    else
 	{   
 		if ($content.length)
 		{  
@@ -512,28 +476,23 @@ function showContentFromMenu($target,forceQuick)
 	}
    if ( !$target.hasClass("accordionContent"))  /* NOT has class */
    { 
-            return( p2.then(function(){return promScrollToMark($target); }) );	  
+            return( p2.then(function(){return promScrollToMark($target)  }) );	  
    }
    else
    {  if (p2) 
-           p3=p2.then(function(){return promFadeShow($target);});
+           p3=p2.then(function(){return promFadeShow($target)});
      else p3 = promFadeShow($target);
      p4 = p3.then(function(){ $target.addClass("current");
      										  $currentBadge= $target.prev();
-     										  return promDomReady($content,$target);});
-     p5=p4.then(function(){return promScrollToMark($target);});	
+     										  return promDomReady($content,$target)});
+     p5=p4.then(function(){return promScrollToMark($target)});	
      p6 = p5.then(function(){if ($currentBadge.hasClass("deskshow"))
      	                                        {  $currentBadge.addClass("current");
-                                                    return promFadeShow($currentBadge,300); 	
-     	                                         }});
+                                                    return promFadeShow($currentBadge,300) 	
+     	                                         }  });
      return p6;
     }
  }
- 
- /* when in desktop mode, moves badge_icon_contaiiner to be adjacent to the just opened video screen
-  * toggle to make the icon show a face indicating it will return the content to text
-  * remove [pre-fix]+"display" class because it has just  called video display; then set top and left dimensions
-  */
  function moveButtonToVideoPosition($button)
 {     makeIconText($button);
 	  var classOut = $button.attr("id").substr(0,3) + "-display",
@@ -542,23 +501,18 @@ function showContentFromMenu($target,forceQuick)
 	  leftShift=Math.max(leftShift,15);
 	  $button.removeClass(classOut).css("left",leftShift+"px").css("top","125px");
 }
-/*
- * make current text calling badge_icon_container as a video invoking badge. Attach class of [prefix]+"display"
- * 
- * */
 function restoreButtonToDisplayPosition($button)
 {   
 	makeIconVideo($button);
 	var classIn = $button.attr("id").substr(0,3) + "-display";
 	$button.css("left","").css("top","").addClass(classIn);
 }
-/* change icon image source*/
 function makeIconVideo($button)
 {
 	var iconImg = $button.find(".iconlink a img");
 	 iconImg.attr("src","img/videoIcon.png");
 }
-/*change icon image source*/
+
 function makeIconText($button)
 {
 	var iconImg = $button.find(".iconlink a img");
@@ -566,15 +520,6 @@ function makeIconText($button)
 }
 
 /* mobile and pad related navigation via "buttons"   */
-/* called from a badge_container_icon, badge_container_title, and just the containing accordionButton as well 
- * target is going to be an accordionContent section, so the calling button is determined by the closest accordionButton; it cannot be just a sibling because
- * the aboutFilm content section has an additonal div wrapper.
- * determine what the new Prefix will be and see if this target is different from what is currently open
- * whether is new or not passed as parameter to  handleButtonIconForContent
- * once button is acquired then currentContent set as next sibling to button
- * if target is badge_title container or accordionButton, call handleButtonLableForContent; for a badge_icon_container call handleButtonIconForContent
- * finally set global currentPrefix as newPrefix 
- * */
 function handleButtonRequest($target)
 {	
 	var $button = $target.closest(".accordionButton"),
@@ -594,17 +539,10 @@ function handleButtonRequest($target)
 	if ($target.hasClass("badge_icon_container") )
 	{ vidDef = handleButtonIconForContent($button, newSection);
 	  vidDef.then(function(){if ($.boeSettings.videoOpen && !$.boeSettings.desktop)
-			                                     scrollToMark($button,$.boeSettings.topBannerHeight-$.boeSettings.buttonHeight-10);});
+			                                     scrollToMark($button,$.boeSettings.topBannerHeight-$.boeSettings.buttonHeight-10)});
 	}
     $.boeSettings.currentPrefix = $.boeSettings.nextPrefix;
  } 
- /*
-  * handleButtonIconForContent
-  * if has a current open accordionButton and the target is the same, then if videoOpen clear the video; ie clicking on the icon will keep content open but
-  * toggle video and text (text being under video so closing video reveal text)
-  * if a different prefix then if video is open, close it and then call showContentButtonsAndScroll with a boolean to force the a quicker action
-  * otherwise, just call showContentButtonsANdScroll
-  */
 function handleButtonIconForContent($button)
 {
 	var  $oldButton = $(".accordionButton.current"),
@@ -626,18 +564,14 @@ function handleButtonIconForContent($button)
 	}
 	if ($.boeSettings.videoOpen)   /* this closes the current video and content section */
 	{    p1= buttonClearVideo($oldButton);
-	     p2=p1.then(function(){ return showContentButtonsAndScroll($button,true); } );
+	     p2=p1.then(function(){ return showContentButtonsAndScroll($button,true) } );
 	     return p2.then(function(){ makeIconText($button);hideContentUnderVideo();
-	                                                return promVideoOpen();});
+	                                                return promVideoOpen() });
    }
     p1= showContentButtonsAndScroll($button);
  	return (  p1.then(function(){ makeIconText($button);hideContentUnderVideo();
- 	                                               return promVideoOpen();} )) ;
+ 	                                               return promVideoOpen()} )) ;
 }   
-/* open text content of accordionContent class
- * if video was open in previous open close it.
- * in either case call showContentButtonsAndScroll
- */
 function handleButtonLabelForContent($button)
 {    var  $oldButton = $(".accordionButton.current"),
 	          p1,p2,p3;
@@ -647,16 +581,7 @@ function handleButtonLabelForContent($button)
 	 }
      return ( showContentButtonsAndScroll($button) );
 } 
-/*
- * showContentButtonsAndScroll
- * $target of accordionButton starts it. @flagRapid is for open videos, flags hiding open content to proceed faster because the closing video adds an extra step.
- * See if target associated content is same as section open. If so, just close the section and scroll the buttons up to reset point
- * If target is not associated then is new change icon title text color to indicate it is chosen; remove current class from current and assign to new making new current
- * if not first time in (so now current content) then double content hide transition time if new choice is further down screen from current. This is because further down
- * means hiding item above it will make a "hole" in the flow. and don't want it to JUMP at this point
- * so hide old content, check the DOM then show new content and scroll to Mark
- * IF FIRST TIME IN just show new content and scroll to Mark
- * */
+
 function showContentButtonsAndScroll($target,flagRapid)   /* $target is section with class of accordionButton */
 {	
 	var $button = $(".accordionButton.current");
@@ -698,22 +623,20 @@ function showContentButtonsAndScroll($target,flagRapid)   /* $target is section 
 	 	$button.removeClass("current");
     
       p1 = promFadeHide($content,contentAnimateDelay,contentHideDelay);
-      p2 = p1.then( function(result){ return ( promButtonDomReady($target));} );
-      p3= p2.then( function(result){ return  promFadeShow($newContent,true);});
+      p2 = p1.then( function(result){ return ( promButtonDomReady($target))} );
+      p3= p2.then( function(result){ return  promFadeShow($newContent,true) });
        
       return p3.then(function(result){ return promScrollToMark($target);} );	                                    
       }    		                       																	
 	 else
 	 {         	  
       	 p1=  promFadeShow($newContent,true);
-         return  (p1.done(function(){return promScrollToMark($target);}));
+         return  (p1.done(function(){return promScrollToMark($target)}));
      } 
  }
 
 /* deferred / promise routines */
 /* full featured menu related deferred/promise routines */
-/* promFadeShow wraps a fadein show() routine in a defered/promise object so that fading show is not jumped over */
-
 function promFadeShow($targ,aniDur)
 {    var $self=$targ;
 	 var aDuration = aniDur || 400;
@@ -727,7 +650,6 @@ function promFadeShow($targ,aniDur)
 	
 	}).promise();
 }
-/* deferred/promise wrapped hide */
 function promFadeHide($targ,aniDur,hideDur)
 {
 	var aDuration = aniDur || 400;
@@ -738,9 +660,7 @@ function promFadeHide($targ,aniDur,hideDur)
 		$self.animate({"opacity":0},aDuration).hide(hDuration,function(){dfr.resolve("HIDE DONE");});   
 	}).promise();
 } 
-/* changes wrought by hiding an element propagate after some delay. This polls the DOM to make sure the change is known and
- * therefore subsequent scrolling dimensions are accurate */
- 
+
 function promDomReady($cont,$targ)
  {
  	    var $content = $cont;
@@ -776,7 +696,7 @@ function promDomReady($cont,$targ)
  		 	            }  
  		 	  }).promise();
 }	   
-/* polling for DOM ready when the mobile button driven screen is used */
+
 function promButtonDomReady($targ)
 { 
       var $target=$targ,
@@ -807,7 +727,7 @@ function promButtonDomReady($targ)
  	         timeOut=setTimeout(checkDom,100);
     }
 }
-/* wraps scroll to Mark in a deferred/promise so that subsequent actions don't step on the scrolling and the scrolling can be dimensionally accurate */
+
 function promScrollToMark($targ,adj)
 {   var $target = $targ;
 	var adjustment = adj;
@@ -818,7 +738,6 @@ function promScrollToMark($targ,adj)
 		scrollToMark($target,adjustment);
     }).promise();
 }
-/*video open wrapped in a deferred/promise */
 function promVideoOpen(d_lay)
 {
    var  delay = d_lay || 400;
@@ -852,16 +771,15 @@ function promVideoOpen(d_lay)
    	           		 	    {    
    	           		 	    	 if (conBar.hasClass("vjs-lock-showing"))  
    	           		 	    	 { thePlayer.play();}
-   	           		 	    	 else {   conBar.removeClass("vjs-lock-showing");
+   	           		 	    	 else {   conBar.removeClass("vjs-lock-showing") 
    	           		 	    	 	         conBar.addClass("vjs-fade-in");
    	           		 	                     setTimeout(function(){conBar.addClass("vjs-fade-out");},100);
    	           		 	                 }
    	           		 	     }
    	            }            
-   	           promFadeShow($vidCont,delay).then(function(){dfr.resolve();});
+   	           promFadeShow($vidCont,delay).then(function(){dfr.resolve() });
      }).promise();
  }
- /* video close wrapped in a deferred/promise */
 function promVideoClose(d_lay)
 {
 	var dlay = d_lay || 400,
@@ -873,20 +791,17 @@ function promVideoClose(d_lay)
     	/*thePlayer.pause();*/   thePlayer.src("");
         $(".vjs-play-control").removeClass("vjs-playing").addClass("vjs-paused");
     	$(".vjs-control-bar").addClass("vjs-lock-showing");
-  	    promFadeHide($("#videocontainer"),dlay).then(function(){dfr.resolve();});
+  	    promFadeHide($("#videocontainer"),dlay).then(function(){dfr.resolve() });
   	    $.boeSettings.videoOpen=false;
   	    thePlayer.height(10).width(10);  
       }).promise();
  } 
  
  /* video routines */
-/* want to hide and reveal content under the video player page. When video palying, don't want text showing under (but don'e want player page to have to be
- * as large as text page6
- */
 function showContentUnderVideo()
   {
   	var cText = "#"+ $.boeSettings.nextPrefix + "-text",
- 	       cBack="#"+ $.boeSettings.nextPrefix+"-bg";
+ 	       cBack="#"+ $.boeSettings.nextPrefix+"-bg"
    	$(cText).removeClass("makeinvisible");
    	$(cBack).removeClass("makeinvisible");
   }

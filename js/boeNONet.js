@@ -19,31 +19,7 @@ $(window).on("load", function()
 											else
 	    										scrollToMark($.boeSettings.accordionButtons,  $.boeSettings.resetButtonsAdjustment);
 	    		   				         };    
-$.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW; 
-                                                        									    var $fbSpan = $("#boefb span");		
-                                                       											if ($fbSpan !== undefined)	
-                                                     											 {
-    	                                                    										fbH =parseInt($fbSpan.css("height"));
-    	                                                    										fbW=parseInt($fbSpan.css("width") );
-    	                                                    										fbHRad = Math.abs(fbH-$.boeSettings.fbHeight);
-    	                                                    										fbWRad = Math.abs(fbW-$.boeSettings.fbWidth); 
-    																								if (fbHRad<=3 && fbWRad <= 3)      
-    																								{
-    																									clearInterval(fbInt);
-       																									$.screenIn();
-        																							}   
-     												 											}	
-                                          														},100); };
-	 $.ajaxSetup({ cache: true });
-     $.getScript('//connect.facebook.net/en_US/all.js', function(){
-                            FB.init({
-                                        appId: '1419525251598984',
-                                        channelUrl: '//www.burdenofeden.com/channel.html',
-                                        status     : true,                                 // Check Facebook Login status
-                                        xfbml      : true     
-                                      });
-                            $('#loginbutton,#feedbutton').removeAttr('disabled');
-                            FB.getLoginStatus() }  ).done(function(){  $.fbLoaded();  }); 
+
 
 	var theEvent = ($.boeSettings.iOS || $.boeSettings.android || (!$.boeSettings.desktop))? "click" : "click"; 
 	
@@ -107,7 +83,7 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
 	  	     	$(window).afterResize($.boeSettings.videoResize,true,150); 
 	 });	     
 	 $(window).afterResize(boeConfig,false,150); 
-	 
+	 $.screenIn();
 });
 
 /* configuration routines */
@@ -139,6 +115,7 @@ function boeInit()
 	   	       "windowWidth":  $(window).width(),
 	   	       "screenHeight": window.screen.height,
 	   	       "screenWidth": window.screen.width,
+	   	       "cssScreenWidth":window.screen.width,
 	   	       "topBannerHeight":$(".topbanner").height(),
 	   	       "homeBannerHeight":$(".banner.home > div").height(),
 	   	       "buttonHeight":  butHeight,
@@ -152,12 +129,16 @@ function boeInit()
 	   	       "fbHeight":20,
 	   	       "fbWidth":75,
 	   	       "desktop":false,
+	   	       "devicePixelRatio":1,
+	   	       "deviceAspectRatio":1.0,
 	   	       "unsupported": unsupported,
 	   	       "iPad":!!iPad, 
 	   	       "iPhone":!!iPhone,
 	   	       "iOS":!!iOS,
 	   	       "mobile":false,
 	   	       "android":!!android,
+	   	       "videoHeight":0,
+	   	       "videoWidth":0,
 	   	       "videoOpen":false,
 	   	       "videoResize":null,
 	   	       "videoDesktopIconWidth":0,
@@ -173,7 +154,27 @@ function boeInit()
 	   	       "his":{"buttonPosition":0,"poster":"img/His-Poster.jpg","vidsrc":[ { type: "video/mp4", src: "video/History.mp4" }, { type: "video/webm", src: "video/History.webm" },
                                                                                       { type: "video/ogg", src: "video/History.ogv" }] }
 	 };
-      if (settings.screenWidth < 768) /*indicate Small video src*/
+ 
+     var dpr=window.devicePixelRatio;
+	 if (dpr)
+	 {
+	 	settings.devicePixelRatio = dpr; 
+	 }
+     
+     if (window.matchMedia)
+     {
+     	if (window.matchMedia("(max-device-aspect-ratio:9/10)").matches)
+     	    settings.deviceAspectRatio = 0.5;
+     }
+    else { //not happy with this but only an issue with IE and small segment browsers
+                 settings.deviceAspectRatio = window.screen.width/window.screen.height; 
+            }
+    if (settings.deviceAspectRatio >= 1.0)
+        $("body").css("min-width","769px"); 
+    else
+        $("body").css("max-width","1025px");      
+     
+     if (settings.screenWidth < 768) /*indicate Small video src*/
      { 
      	var vidPropArray = [settings.com.vidsrc,settings.des.vidsrc,settings.his.vidsrc],
               limit = vidPropArray.length,
@@ -198,7 +199,9 @@ function boeInit()
 }
  /* boeConfig changes some boeSettings after resize event; also called once after boeInit, called from jQ ready */
 function boeConfig()
-{  	 
+{ 
+	$.boeSettings.desktop = ($.boeSettings.deviceAspectRatio >= 1.0 || ($(window).width() > 1024) );
+	 	 
    if($.boeSettings.videoOpen)
 	     $.boeSettings.videoResize();
 	 $('.nav').myspasticNav();
@@ -211,7 +214,8 @@ function boeConfig()
 	 $("#historyButton").removeClass("his-display");
 	 $.boeSettings.resetButtonsAdjustment= 170;
      $.boeSettings.videoDesktopIconWidth = 0;
-     
+  
+ 
      if ($.boeSettings.desktop )
      { $.boeSettings.scrollToMarkAdjustment=$.boeSettings.topBannerHeight;
 	   $.boeSettings.initButtonOffset = 0;
@@ -265,8 +269,10 @@ function sizeBannersAndPagesDesktop(){
         $.boeSettings.bannerHome.css( "height", wH + "px");
         $.boeSettings.bannerHomeDiv.css("padding-top", parseInt((wH - $.boeSettings.homeBannerHeight) / 2)); 
         $.boeSettings.bannerPages.css("min-height",wH + "px");
-        $(".accordionContent [id*='-wrapper']").css("min-height",wH+"px" ); 
+    /*    $(".accordionContent [id*='-wrapper']").css("min-height",wH+"px" ); */
 }
+
+
 function sizeBannersAndPagesIPad(){
 	 var contentMinHeight = 1024,
 	        bannerHomeHeight = $.boeSettings.topBannerHeight + $.boeSettings.initButtonOffset,
@@ -282,7 +288,7 @@ function sizeBannersAndPagesMobile() {
    contentMinHeight = 400;
  $.boeSettings.bannerPages.css("min-height",pageH +"px");  
  $.boeSettings.bannerHome.css( "height",$.boeSettings.initButtonOffset + "px");  
- $(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );  /*$.boeSettings.topBannerHeight + $.boeSetttings.initButtonOffset*/
+ $(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" ); /*$.boeSettings.topBannerHeight + $.boeSetttings.initButtonOffset*/
  $.boeSettings.bannerHomeDiv.css('padding-top', 0 );    
 }
 
