@@ -251,8 +251,8 @@ section.banner  {
        font-weight:400;
        color:#ffffff;       
        position:relative;
-      cursor:pointer;
-      padding-top:0px;
+       cursor:pointer;
+       padding-top:0px;
       opacity:0;
       z-index:540; /*walker was 40 */
       margin:0 auto 30px;
@@ -314,7 +314,7 @@ section.banner  {
 #get-wrapper {height:470px;background-color:#f0e7ec;}                       
 #com-wrapper {   
                           background-image: url('../img/CommunityA.jpg');
-                          height:820px;          
+                           
                         }                                
  #des-wrapper {         
                             background-image:url('../img/DesignA.jpg');
@@ -339,20 +339,22 @@ section.banner  {
                              width:100.0%;
                              padding:0 2% 1%; 
                              padding-left:120px; 
-                             background-color:#131313;
                              background:rgba(19,19,19,0.5);
                             -moz-box-sizing:border-box;
                              box-sizing:border-box;
-                             background-size:cover;
                           }
 
 #dir-text   {   
-                     width:44%;.
-                     padding:0 4% 1% 4%;  
-                     padding-top:60px;  
+                     width:38.5%;
+                     padding:0% 4%;  /* needs further assignment later*/
+                     padding-top:100px;
+                     background-color:#131313;
+                     background:rgba(19,19,19,0.5);
+                     -moz-box-sizing:border-box;
+                     box-sizing:border-box;;
+                   
                    }    
-#des-text   {  
-                     width:32.5%;
+#des-text   {  width:32.5%;
                      padding:50px 0 100px 0;  
                      padding-right:3%;
                      padding-left:125px;  
@@ -360,11 +362,8 @@ section.banner  {
                      background:rgba(19,19,19,0.5);
                      -moz-box-sizing:content-box;
                      box-sizing:content-box;
-                     background-size:cover;
                    }                  
-                              
-#his-text   {   
-                    width:32.5%;
+#his-text   {  width:32.5%;
                     padding:50px 0 100px  0;
                     padding-right:3%;
                     padding-left:125px;
@@ -376,7 +375,6 @@ section.banner  {
                     box-sizing:content-box;
                     background-size:cover;
                  }
-
 #get-text {float:left}
 
 .com-columns {   -webkit-column-count:2;
@@ -451,24 +449,20 @@ img {margin:0; padding:0;}
                                    height: 21.079046%;
                                    max-height:504px;
                                   }
-#aboutFilmArticle  p {       
-                                            margin:0;
-                                            text-indent:3%; 
-                                            text-align:justify;
-                                             padding-right:5.614%;
-                                            font-family:'Balthazar';
-                                            font-size:2.5em;
-                                            line-height:1.4;
-                                        }
-#aboutFilmBQ  { 
-                                  position:relative;
-                                  padding: 0 0 0 0;
-                                  font-style: normal;
-                                  font-weight:400;
-                                  font-family: Oswald;
-                                  width:80%;
-                                  margin: 0 auto;
-                                }
+#aboutFilmArticle  p {  margin:0;
+                                    text-indent:3%; 
+                                    text-align:justify;
+                                    padding-right:5.614%;
+                                    font-family:'Balthazar';
+                                    font-size:2.5em;
+                                    line-height:1.4;}
+#aboutFilmBQ  { position:relative;
+                           padding: 0 0 0 0;
+                            font-style: normal;
+                            font-weight:400;
+                            font-family: Oswald;
+                            width:80%;
+                            margin: 0 auto;}
 #aboutFilmBQ p { text-indent:0;font-family:Oswald;line-height:1.2;padding-bottom:12px;}                    
 #aboutFilmBQ:before, #aboutFilmBQ:after { display: block;font-size: 7.5em;}
 #aboutFilmBQ:before { 

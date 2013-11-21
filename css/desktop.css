@@ -3,91 +3,92 @@
                 -webkit-border-radius:0px;-moz-border-radius:0px;border-radius:0px;
                 overflow:hidden;} 
 .badge_icon_container  { float:none;height:75px;width:100px;
-                                            border-bottom:#777777 1px solid;
-                                            -webkit-border-radius:0px;-moz-border-radius:0px;border-radius:0px;
-                                           }       
+                                         border-bottom:#777777 1px solid;
+                                         -webkit-border-radius:0px;-moz-border-radius:0px;border-radius:0px;
+                                        }       
 .badge_title_container {left:0px;top:0px;position:relative;height:35px;
                                          width:100px;border-top:#111111 1px solid;}
 .badge_title  {position:absolute;top:0;bottom:0;left:0;right:0;height:25px;}  
 .badge h2 { text-align:center;
-                     line-height:0;
-                     padding-top:15px;} 
+                   line-height:0;
+                   padding-top:15px;} 
+#designButton, #historyButton, #communityButton  {position:absolute;  font-size:20px;}                           
+#communityButton  {font-size:16px;}
+#communityButton .badge h2 { font-size:16px}
                                        
 .his-display {top:190px; right:35.75%;margin-right:10px;}
 #his-wrapper {background-position:top left } 
-
 .des-display {top:190px;right:35.75%;margin-right:10px}  
-#com-text {float:none;bottom:0px}
-.com-display {top:590px;left:10px;}                        
-#designButton, #historyButton, #communityButton  {padding-top:0px;position:absolute;  font-size:20px;}                           
-#communityButton  {font-size:16px;}
-#communityButton .badge h2 { font-size:16px   }
+
+#com-text {float:none;position:relative; bottom:0px;padding-top:31%;padding-bottom:1.0%} /*walker nov19*/
+#com-text {   background:rgba(19,19,19,0.5);
+                     background:-webkit-linear-gradient(bottom,rgba(19,19,19,0.6) ) 0%, rgba(19,19,19,0.6) 44%,transparent 44%, transparent);
+                     background:linear-gradient(to top,rgba(19,19,19,0.6) 0%, rgba(19,19,19,0.6) 44%,transparent 44%,transparent); 
+                 }
+.com-display {top:0px; left:10px;padding-top:43%}  /*walker */
+#com-wrapper {background-position:0 20%}  /*walker nov 19*/                       
+#dir-text {padding-bottom:15%;padding-left:4%;padding-right:4%}
 
 @media only screen and (min-width:480px)
 { #shortsubtitle    {display:none;}
   #longsubtitle    {display:block;}
 }
-
-
  @media only screen and (min-width: 960px)  
  {     
       nav  a.darkmenu {color:#300a14;}
       nav a.lightmenu  {color:#F0E4EC;}
-      
-      .topbanner nav {display:block}
-      .nav li.openmenu     { margin-right: 2.0em;
-                                         font-size:1.4em;} 
+     .topbanner nav {display:block}
+      .nav li.openmenu     { margin-right: 2.0em;} 
      .home {display:block;}       
      #top-filmtitle { width:342px; }     
     .top-maintitle {font-size:3.2em; text-align:none;}                       
     .top-director { padding-right:5px;}
 }
-
 @media only screen and (min-width: 1296px) and (max-width:1440px)
-{ 
-         .nav li       {   margin-right: 2.0em;
-                               font-size:1.4em; }     
+{ .nav li       {   margin-right: 2.0em; }    
+   .com-columns {-webkit-column-count:3;-moz-column-count-3;column-count:3} 
 } 
-
 @media only screen and (min-width:1200px) and  (max-width:1299px)
-    {     
-        #com-wrapper { background-position: center center; }   
-                                                          
-       #his-text,#des-text {font-size:1.9em}  
-      
-       #aboutFilmArticle   p  {font-size:2.3em;line-height:1.2;}
+    { #dir-text {width:40%}  
+      #com-text {padding-top:33.3%; }       
+      #com-text {background:rgba(19,19,19,0.5);
+                         background:-webkit-linear-gradient(bottom,rgba(19,19,19,0.6) ) 0%, rgba(19,19,19,0.6) 46%,transparent 46%, transparent);
+                         background:linear-gradient(to top,rgba(19,19,19,0.6) 0%, rgba(19,19,19,0.6) 46%,transparent 46%,transparent);}
+      .com-display {padding-top:43%} 
+      #his-text,#des-text {font-size:1.9em}  
+       #aboutFilmArticle p  {font-size:2.3em;line-height:1.2;}
        #aboutFilmBQ p {  font-size:2.3em}       
        #aboutFilmBQ:before, #aboutFilmBQ:after { font-size: 6.9em; }
  }  
  @media only screen and (min-width: 1152px) and (max-width:1295px)
 { 
-        .nav li    {  margin-right: 1.6em;
-                         font-size:1.4em;
-                         font-weight:normal;
-                         } 
+        .nav li    {  margin-right: 1.6em;font-weight:normal;} 
          #his-text {font-size:1.8em;padding-bottom:80px}       
-      
-                     
 }
 @media only screen and (min-width:1024px) and  (max-width:1199px)
-    {
-         #com-text {  font-size:1.9em;}
-        #com-wrapper { background-position: center center; }   
-      #his-text {font-size:1.7em;padding-bottom:40px}    
- 
+    {     
+          #com-text {  font-size:1.8em; padding-bottom:1.5%; padding-top:34%}
+          #com-text {   background:rgba(19,19,19,0.5);
+                                background:-webkit-linear-gradient(bottom,rgba(19,19,19,0.6) ) 0%, rgba(19,19,19,0.6) 49%,transparent 49%, transparent);
+                                background:linear-gradient(to top,rgba(19,19,19,0.6) 0%, rgba(19,19,19,0.6) 49%,transparent 49%,transparent); 
+                             }
+           .com-display {padding-top:46%}       
+           #com-wrapper { background-position: center 25% }   
+          #his-text {font-size:1.7em;padding-bottom:40px}    
+
        #aboutFilmArticle p {  font-size:2.1em; }
       #aboutFilmBQ p { text-indent:0; font-size:2.2em}   
      #aboutFilmBQ:before, #aboutFilmBQ:after { font-size: 6.6em; } 
      #aboutFilmBQ:after {height:43px;margin-top:-48px}     
-     #ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;   
-                           margin-top:20px; margin-bottom:60px;}  
+     #ab-header {width:55%;margin:0 7.303% 0 37.693%; margin-bottom:60px;}  
+     #dir-text {width:42%; font-size:1.9em}
 } 
 @media only screen and (min-width: 1024px) and (max-width:1151px)
 { 
          #top-filmtitle {width:317px;}
         .top-subtitle   {font-weight:400;font-size:1.6em;} 
         .top-director   {padding-top:14px;}
-        .nav li              { margin-right: 1.4em; font-size:1.4em; font-weight:normal;}
+        .nav li              { margin-right: 1.4em; font-weight:normal;}
          #page-filmtitle {width:454px;}
         .page-maintitle {  font-size:4.0em;line-height:0;}
         .page-subtitle { font-weight:300;line-height:1.30;margin-top:1.0em;font-size:2.4em;border-bottom:1px solid #300a14;}
@@ -95,33 +96,37 @@
 }
 
 @media only screen and (max-width:1023px)
-{
+{   
     #his-text {font-size:1.8em;width:47%;padding-bottom:160px;padding-right:9%;}
     .his-display {right:56%}  
     #des-text {1.9em; width:47%;padding-bottom:95px;padding-right:9%}
     .des-display {right:56%}
+    #com-text {font-size:1.7em}
+    #ab-container {padding-left:4%;  } 
+    #ab-header {width:55%;margin:0 7.303% 0 37.693%; margin-bottom:60px;  }    
 }
 
 @media only screen and (min-width:900px)  and  (max-width:1023px)
-{    
-       #com-text {    font-size:1.9em; 
-                               line-height:1.4;
-                          }
-      #com-wrapper { background-position: 50% 10% ; }   
+{   
+       #com-text {  padding-bottom:2%; padding-top:39%}
+      #com-text {   background:rgba(19,19,19,0.5);
+                             background:-webkit-linear-gradient(bottom,rgba(19,19,19,0.6) ) 0%, rgba(19,19,19,0.6) 50%,transparent 50%, transparent);
+                              background:linear-gradient(to top,rgba(19,19,19,0.6) 0%, rgba(19,19,19,0.6) 50%,transparent 50%,transparent); 
+                          } 
+      .com-display {padding-top:52%}         
+      #com-wrapper { background-position: 50% 25% ; }   
       #dir-wrapper      {background-position: 10% 0%}  
-      #dir-text {  width: 50%;font-size:1.8em; }
+   
+  #dir-text {width:44%; font-size:1.8em}   
+               
   
        #aboutFilmArticle p {  
                      font-size:1.9em;
-                   }
+}
      #aboutFilmBQ p { text-indent:0; font-size:2.0em}       
     #aboutFilmBQ:before, #aboutFilmBQ:after { font-size: 6.0em; } 
     #aboutFilmBQ:after {padding-top:10px} 
-   #ab-container {padding-left:4%;  } 
-    
-              #ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;   
-                                    margin-top:20px; margin-bottom:60px;  }  
-        
+   
          #get-text { width:85%;margin:0 7.5% }                           
  }          
 
@@ -140,11 +145,8 @@
 }
 
 @media only screen and (max-width:769px)
-{
-   html, body {width:769px;}
-  
+       {   html, body {width:769px;}
 }
-
 
 @media only screen and  (max-width:959px)
 {
@@ -158,7 +160,7 @@
     .top-subtitle   {font-weight:400;font-size:1.6em; line-height:1.2;}   
      .top-director   {padding:0;font-size:1.6em; line-height:1.2;padding-top:20px;}
      .topbanner  nav {right:1%;}
-     .nav li      {margin-right:1.4em; font-size:1.4em; font-weight:normal; bottom:2px;}
+     .nav li      {margin-right:1.4em; font-weight:normal; bottom:2px;}
       #page-filmtitle {width:410px;}
      .page-maintitle { font-size:3.6em;line-height:0;}
      .page-subtitle {font-weight:300;line-height:1.30;margin-top:1.0em;font-size:2.2em;border-bottom:1px solid #300a14;}
@@ -170,9 +172,15 @@
   { 
       #his-text {font-size:1.7em;padding:bottom:40px}
       #des-wrapper {border-color:blue}     
-      #com-text { font-size:1.8em;
-                          padding-top:380px;  
-                          line-height:1.4;}
+   
+      #com-text {padding-bottom:1.5%; padding-top:49%}
+      #com-text {   background:rgba(19,19,19,0.5);
+                   background:-webkit-linear-gradient(bottom,rgba(19,19,19,0.6) ) 0%, rgba(19,19,19,0.6) 50%,transparent 50%, transparent);
+                   background:linear-gradient(to top,rgba(19,19,19,0.6) 0%, rgba(19,19,19,0.6) 50%,transparent 50%,transparent); 
+                 } 
+      .com-display {padding-top:65%} 
+      #com-wrapper { background-position: 60% 35% ; }                      
+                         
       .com-columns {padding:1% 2% 1% 2%;
                                  -webkit-column-count:2;
                                  -moz-column-count:2;
@@ -180,26 +188,10 @@
                                  -moz-column-gap: 20px;  
                                  -webkit-column-gap:20px; 
                                  column-gap:20px; }                          
-     #com-wrapper { -webkit-background-size:contain;
-                                   -moz-background-size:contain;
-                                   background-size:contain;
-                                   background-position: center top;height:820px;          
-                                   width:100%;background-color:#2A2D27; }     
-     #com-bg  { width:100%;
-                             top:360px;
-                             height:460px;
-                             background-color:#2A2D27;
-                          }
-     
+        
        #dir-wrapper      {background-position: 10% 0%}  
-     
-     #dir-bg, #des-bg { width: 55%; height:100%; }
-     
-     #dir-text { 
-                             width: 55%;
-                             font-size:1.8em;
-                             line-height: 1.5;
-                       }
+       #dir-text {width:46%;font-size:1.7em} 
+                
     
      #get-text         {width:90%; margin:0 5%}
      .getsocicon {margin-right:12px;}
@@ -209,9 +201,4 @@
      #aboutFilmBQ p { text-indent:0; font-size:2.1em;padding-left:18px;}       
      #aboutFilmBQ:before, #aboutFilmBQ:after { font-size: 6.0em; } 
      #aboutFilmBQ:after {padding-top: 13px;} 
-     #ab-container {padding-left:4%;  } 
-     #ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;   
-                                     margin-top:20px; margin-bottom:60px;  }    
- }     
- 
- 
+  }     
