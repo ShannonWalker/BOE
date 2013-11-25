@@ -169,10 +169,10 @@ function boeInit()
     else { //not happy with this but only an issue with IE and small segment browsers
                  settings.deviceAspectRatio = window.screen.width/window.screen.height; 
             }
-    if (settings.deviceAspectRatio >= 1.0)
+ /*   if (settings.deviceAspectRatio >= 1.0)
         $("body").css("min-width","769px"); 
     else
-        $("body").css("max-width","1025px");      
+        $("body").css("max-width","1025px"); */ /*walker*/
      
      if (settings.screenWidth < 768) /*indicate Small video src*/
      { 
@@ -186,7 +186,7 @@ function boeInit()
      	      	        this.src=this.src.replace(".","S.");
      	      	  });  
      	      }
-        }	
+       }	
   	 $(".accordionButton").each(function(index,  element)
 	 {
 	   		var prefix = $(element).attr("id").substr(0,3);   
@@ -200,7 +200,7 @@ function boeInit()
  /* boeConfig changes some boeSettings after resize event; also called once after boeInit, called from jQ ready */
 function boeConfig()
 { 
-	$.boeSettings.desktop = ($.boeSettings.deviceAspectRatio >= 1.0 || ($(window).width() > 1024) );
+	$.boeSettings.desktop = false; /*($.boeSettings.deviceAspectRatio >= 1.0 || ($(window).width() > 1024) );*/
 	 	 
    if($.boeSettings.videoOpen)
 	     $.boeSettings.videoResize();
@@ -269,9 +269,8 @@ function sizeBannersAndPagesDesktop(){
         $.boeSettings.bannerHome.css( "height", wH + "px");
         $.boeSettings.bannerHomeDiv.css("padding-top", parseInt((wH - $.boeSettings.homeBannerHeight) / 2)); 
         $.boeSettings.bannerPages.css("min-height",wH + "px");
-    /*    $(".accordionContent [id*='-wrapper']").css("min-height",wH+"px" ); */
+   
 }
-
 
 function sizeBannersAndPagesIPad(){
 	 var contentMinHeight = 1024,
