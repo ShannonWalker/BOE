@@ -7,10 +7,10 @@ $(window).on("load", function()
 {  
 	$.boeSettings=boeInit(); 
 	if ($.boeSettings.unsupported)
-	     window.location.replace("notsupported.html");
-   	boeConfig();
+	     window.location.replace("notsupported.html");alert("SI    A");
+   	boeConfig();alert("SI    B");
 	$("#videocontainer").hide();
-	$.screenIn = function(){ 
+	$.screenIn = function(){ alert("SI    1");
    							                $('.accordionContent').hide(); 
    							                $('.deskshow').hide();
 											$("#splash").hide();
@@ -19,32 +19,9 @@ $(window).on("load", function()
 	   	 										scrollToMark($.boeSettings.bannerHome); 
 											else
 	    										scrollToMark($.boeSettings.accordionButtons,  $.boeSettings.resetButtonsAdjustment);
+	    								alert("SI    2");	
+	
 	    		   				         };    
-$.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW; 
-                                                        									    var $fbSpan = $("#boefb span");		
-                                                       											if ($fbSpan !== undefined)	
-                                                     											 {
-    	                                                    										fbH =parseInt($fbSpan.css("height"));
-    	                                                    										fbW=parseInt($fbSpan.css("width") );
-    	                                                    										fbHRad = Math.abs(fbH-$.boeSettings.fbHeight);
-    	                                                    										fbWRad = Math.abs(fbW-$.boeSettings.fbWidth); 
-    																								if (fbHRad<=3 && fbWRad <= 3)      
-    																								{
-    																									clearInterval(fbInt);
-       																									$.screenIn();
-        																							}   
-     												 											}	
-                                          														},100); };
-	 $.ajaxSetup({ cache: true });
-     $.getScript('//connect.facebook.net/en_US/all.js', function(){
-                            FB.init({
-                                        appId: '1419525251598984',
-                                        channelUrl: '//www.burdenofeden.com/channel.html',
-                                        status     : true,                                 // Check Facebook Login status
-                                        xfbml      : true     
-                                      });
-                            $('#loginbutton,#feedbutton').removeAttr('disabled');
-                            FB.getLoginStatus(); }).done(function(){  $.fbLoaded();  }); 
 
 	var theEvent = ($.boeSettings.iOS || $.boeSettings.android || (!$.boeSettings.desktop))? "click" : "click"; 
 	
@@ -91,14 +68,15 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
         	            contentTop = $.boeSettings.currentContent.position().top; 
                         contentTop +=  ( ($.boeSettings.desktop) ? 0 : $.boeSettings.buttonHeight),
 		                height= $(window).height() - $.boeSettings.topBannerHeight-(($.boeSettings.screenWidth > 767)?20:0), 
-		                dims = videoDimensions(height,width-($.boeSettings.desktop?20:0 ) ),
-		                $currentButton=$(".accordionButton .current"), 
+		                dims = videoDimensions(height,width-($.boeSettings.desktop?20:0 ) ), 
+		                $currentButton=$(".accordionButton .current"),
 		                padLeft=0;
 		                padLeft = (width-dims.width-$.boeSettings.videoDesktopIconWidth)/2;
 		                if ($.boeSettings.desktop)
-                           padLeft = (padLeft < $.boeSettings.videoDesktopIconWidth) ? $.boeSettings.videoDesktopIconWidth: padLeft; 
+                           padLeft = (padLeft < $.boeSettings.videoDesktopIconWidth) ? $.boeSettings.videoDesktopIconWidth+10: padLeft; 
 		                if (!$.boeSettings.desktop)
-		                   vConHeight-=83;
+		                   vConHeight-=83;  /*adjustment for button on top*/
+		               $("#videocontainer").height(vConHeight).css({"padding-left": padLeft +"px","width":(width-padLeft)+"px","padding-top":"15px","top":contentTop+"px"});
                       ($.boeSettings.myPlayer).height(dims.height).width( dims.width);
                       if ($.boeSettings.videoOpen)
                       {  moveButtonToVideoPosition($currentButton);
@@ -110,12 +88,14 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
 	  	     	this.volume(0.5);
 	  	     	$(window).afterResize(boeResize,true,150); 
 	 });	     
+	
 	 var  supportsOrientationChange = "onorientationchange" in window;
 	 orientationEvent = supportsOrientationChange ? "orientationchange" : "resize"; 
      window.addEventListener(orientationEvent, function() { if ($.boeSettings.android)$.boeSettings.androidRotation=true;});
                                                                        
-
+	 $.screenIn();
 });
+
 function boeResize()
 {
      $.boeSettings.videoResize();	
@@ -133,6 +113,7 @@ function boeResize()
      	    },1000);
      	}
 }
+
 /* configuration routines */
 /* boeInit called once in JQuery ready. Sets up boeSettings variables. Also determines pixel density and pixel ratio used to determine if display should be
  * for a mobile device or a desktop
@@ -162,6 +143,7 @@ function boeInit()
 	   	       "windowWidth":  $(window).width(),
 	   	       "screenHeight": window.screen.height,
 	   	       "screenWidth": window.screen.width,
+	   	       "cssScreenWidth":window.screen.width,
 	   	       "topBannerHeight":$(".topbanner").height(),
 	   	       "homeBannerHeight":$(".banner.home > div").height(),
 	   	       "buttonHeight":  butHeight,
@@ -175,6 +157,8 @@ function boeInit()
 	   	       "fbHeight":20,
 	   	       "fbWidth":75,
 	   	       "desktop":false,
+	   	       "devicePixelRatio":1,
+	   	       "deviceAspectRatio":1.0,
 	   	       "unsupported": unsupported,
 	   	       "iPad":!!iPad, 
 	   	       "iPhone":!!iPhone,
@@ -182,6 +166,8 @@ function boeInit()
 	   	       "mobile":false,
 	   	       "android":!!android,
 	   	       "androidRotation":false,
+	   	       "videoHeight":0,
+	   	       "videoWidth":0,
 	   	       "videoOpen":false,
 	   	       "videoResize":null,
 	   	       "videoDesktopIconWidth":0,
@@ -197,7 +183,19 @@ function boeInit()
 	   	       "his":{"buttonPosition":0,"poster":"img/His-Poster.jpg","vidsrc":[ { type: "video/mp4", src: "video/History.mp4" }, { type: "video/webm", src: "video/History.webm" },
                                                                                       { type: "video/ogg", src: "video/History.ogv" }] }
 	 };
-     
+ 
+     var dpr=window.devicePixelRatio;
+	 if (dpr)
+	 {
+	 	settings.devicePixelRatio = dpr; 
+	 }
+  alert("dpr "+dpr);
+     settings.desktop = settings.deviceAspectRatio >= 1.0 || ($(window).width() > 1024) || $(window.height() > 1024);
+      if (settings.desktop)
+        $("body").css("min-width","769px"); 
+    else
+        $("body").css("max-width","1025px");
+  
   	 $(".accordionButton").each(function(index,  element)
 	 {
 	   		var prefix = $(element).attr("id").substr(0,3);   
@@ -229,11 +227,11 @@ function setVideoFileGroup()
      	      	  });  
      	      }
 }
+
  /* boeConfig changes some boeSettings after resize event; also called once after boeInit, called from jQ ready */
 function boeConfig()
 { 
-		
-	setVideoFileGroup(); 
+
    if($.boeSettings.videoOpen)
 	     $.boeSettings.videoResize();
 	 $('.nav').myspasticNav();
@@ -259,7 +257,9 @@ function boeConfig()
 	   sizeBannersAndPagesDesktop();
      }
      else
-            {	
+            {	 
+            	$.boeSettings.screenHeight=window.screen.height;
+            	$.boeSettings.screenWidth=window.screen.width;
             	$.boeSettings.mobile=true;
             	if( $.boeSettings.iPad || $.boeSettings.screenWidth >= 768 )
 	             {  
@@ -269,7 +269,7 @@ function boeConfig()
 	 	            sizeBannersAndPagesIPad(); 
 	             }  
 	             else
-	      	 	            {  
+	      	 	            {  	
 	      	 	               $.boeSettings.initButtonOffset = 30; 
 	         				   $.boeSettings.buttonGroupAdjustment = 0;
 	                    	   $.boeSettings.scrollToMarkAdjustment=0;
@@ -290,6 +290,8 @@ function boeConfig()
 	 	   		hideTitlesForScroll();
 	 		}
 	 }
+
+	 setVideoFileGroup();
 } 
 /*sizing routines */
 /* sizeBannerAndPagesDesktop, the home banner which is where the main titles screen displays in desktop mode. Home banner is set to the hight of the
@@ -302,21 +304,21 @@ function sizeBannersAndPagesDesktop(){
         $.boeSettings.bannerHome.css( "height", wH + "px");
         $.boeSettings.bannerHomeDiv.css("padding-top", parseInt((wH - $.boeSettings.homeBannerHeight) / 2)); 
         $.boeSettings.bannerPages.css("min-height",wH + "px");
-}
+ }
 function sizeBannersAndPagesIPad(){
 	 var  bannerHomeHeight = $.boeSettings.topBannerHeight + $.boeSettings.initButtonOffset,
 	        pageH=sizeButtonBannerPage();
 	   $.boeSettings.bannerPages.css("min-height",pageH +"px"); 
        $.boeSettings.bannerHome.css( "height", bannerHomeHeight + "px");  
        $.boeSettings.bannerHomeDiv.css('padding-top', 0 ); 
+       
  }
- 
 function sizeBannersAndPagesMobile() {
    var pageH = sizeButtonBannerPage(),
    contentMinHeight = 400;
  $.boeSettings.bannerPages.css("min-height",pageH +"px");  
  $.boeSettings.bannerHome.css( "height",$.boeSettings.initButtonOffset + "px");  
- $(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" );
+ $(".accordionContent [id*='-wrapper']").css("min-height",contentMinHeight +"px" ); /*$.boeSettings.topBannerHeight + $.boeSetttings.initButtonOffset*/
  $.boeSettings.bannerHomeDiv.css('padding-top', 0 );    
 }
 
@@ -345,7 +347,7 @@ function videoDimensions(wH,wW)
                        if (wH < height)
                        {     width = wH*aspectRatio;
                             height=width * inverseAspectRatio; }
-                  }
+                        }
            return {"height":height,"width":width};        
  } 
  
@@ -566,7 +568,7 @@ function showContentFromMenu($target,forceQuick)
   * toggle to make the icon show a face indicating it will return the content to text
   * remove [pre-fix]+"display" class because it has just  called video display; then set top and left dimensions
   */
-function moveButtonToVideoPosition($button)
+ function moveButtonToVideoPosition($button)
 {     makeIconText($button);
 	  var classOut = $button.attr("id").substr(0,3) + "-display",
 	  vidOffset =  parseInt($("#my_video_player").css("padding-left")),
