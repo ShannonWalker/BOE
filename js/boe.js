@@ -113,8 +113,7 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
 	 var  supportsOrientationChange = "onorientationchange" in window;
 	 orientationEvent = supportsOrientationChange ? "orientationchange" : "resize"; 
      window.addEventListener(orientationEvent, function() { if ($.boeSettings.android)$.boeSettings.androidRotation=true;});
-                                                                       
-
+  
 });
 function boeResize()
 {
@@ -198,6 +197,8 @@ function boeInit()
                                                                                       { type: "video/ogg", src: "video/History.ogv" }] }
 	 };
      
+   settings.desktop = (settings.screenHeight > 1024 || settings.screenWidth > 1024) ? true:false;
+   
   	 $(".accordionButton").each(function(index,  element)
 	 {
 	   		var prefix = $(element).attr("id").substr(0,3);   
@@ -233,7 +234,7 @@ function setVideoFileGroup()
 function boeConfig()
 { 
 		
-	setVideoFileGroup(); 
+   setVideoFileGroup(); 
    if($.boeSettings.videoOpen)
 	     $.boeSettings.videoResize();
 	 $('.nav').myspasticNav();
