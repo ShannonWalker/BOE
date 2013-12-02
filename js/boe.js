@@ -12,7 +12,8 @@ $(window).on("load", function()
 	$("#videocontainer").hide();
 	$.screenIn = function(){ 
    							                $('.accordionContent').hide(); 
-   							                $('.deskshow').hide();
+   							               if ($.boeSettings.desktop)  
+   							               	  $('.deskshow').hide(); 
 											$("#splash").hide();
 											$("#wrapper").animate({"opacity":1},1000);
 	 										if ($.boeSettings.desktop)
@@ -81,30 +82,33 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
 	   }
 	});
  	$(this).on("scroll",titlesForScroll); 
+ 	
  	$.boeSettings.videoResize = function(force)
 	 {                                                                           
 	 	 if (force || $.boeSettings.videoOpen)	
-	 	 {    /* only size the video if it is playing or setting up to be played, videoOpen flag */
-		         var  vidContainerTop = 0,
-        	            width =$(window).width(),
+	 	 {   
+		         var  topBorder=10,
+		                controlBar=30,
+		                width=$(window).width(),
+		                height=$(window).height()-topBorder-controlBar,
+		                vidContainerTop = 0,
         	            vConHeight = (!!$.boeSettings.currentContent) ? $.boeSettings.currentContent.height():0,
-        	            contentTop = $.boeSettings.currentContent.position().top; 
-                        contentTop +=  ( ($.boeSettings.desktop) ? 0 : $.boeSettings.buttonHeight),
-		                height= $(window).height() - $.boeSettings.topBannerHeight-(($.boeSettings.screenWidth > 767)?20:0), 
-		                dims = videoDimensions(height,width-($.boeSettings.desktop?20:0 ) ),
-		                $currentButton=$(".accordionButton .current"), 
-		                padLeft=0;
-		                padLeft = (width-dims.width-$.boeSettings.videoDesktopIconWidth)/2;
-		                if ($.boeSettings.desktop)
-                           padLeft = (padLeft < $.boeSettings.videoDesktopIconWidth) ? $.boeSettings.videoDesktopIconWidth: padLeft; 
-		                if (!$.boeSettings.desktop)
-		                   vConHeight-=83;
-                      ($.boeSettings.myPlayer).height(dims.height).width( dims.width);
-                      if ($.boeSettings.videoOpen)
-                      {  moveButtonToVideoPosition($currentButton);
-                       }
+        	            contentTop = $.boeSettings.currentContent.position().top,
+        	            $currentButton=$(".accordionButton .current"), 
+        	            padLeft=0;
+        	             if ($.boeSettings.screenWidth > 767)
+        	                 height-=$.boeSettings.topBannerHeight;
+        	             width-=$.boeSettings.videoDesktopIconWidth-20; /* 20 for scroll */
+        	             if (!$.boeSettings.desktop)
+        	               contentTop-=$.boeSettings.buttonBottomMargin;
+        	             dims = videoDimensions(width,height);    
+        	             padLeft = Math.max($.boeSettings.videoDesktopIconWidth,($(window).width()-dims.width)/2); 
+        	             $("#videocontainer").height(vConHeight).css({"padding-left":padLeft+"px","width":width+"px","top":contentTop+"px"});
+        	             ($.boeSettings.myPlayer).height(dims.height).width( dims.width);
+        	             if ($.boeSettings.videoOpen && $.boeSettings.desktop)
+                        {  moveButtonToVideoPosition($currentButton); }
             }  	 
-     }; /*end video resize */                                   								
+    };      /*end video resize */                                   								
 	videojs("my_video_player").ready(function()
 	{          	 $.boeSettings.myPlayer = this;
 	  	     	this.volume(0.5);
@@ -185,6 +189,7 @@ function boeInit()
 	   	       "videoResize":null,
 	   	       "videoDesktopIconWidth":0,
 	   	       "myPlayer":null,
+	   	       "videoContainer":$("#videocontainer"),
 	   	       "currentContent":null,
 	   	       "currentContentHeight":0,
 	   	       "currentPrefix":"X",
@@ -198,6 +203,19 @@ function boeInit()
 	 };
      
    settings.desktop = (settings.screenHeight > 1024 || settings.screenWidth > 1024) ? true:false;
+   if (settings.screenWidth < 768 || settings.screenHeight < 768) /*indicate Small video src*/
+     { 
+     	var vidPropArray = [settings.com.vidsrc,settings.des.vidsrc,settings.his.vidsrc],
+              limit = vidPropArray.length,
+              i;    	
+     	      for (i=0;i<limit;i++)
+     	      {   
+     	      	  $.each(vidPropArray[i],function(i,o)
+     	      	  {      
+     	      	        this.src=this.src.replace(".","S.");
+     	      	  });  
+     	      }
+        }	
    
   	 $(".accordionButton").each(function(index,  element)
 	 {
@@ -233,8 +251,7 @@ function setVideoFileGroup()
  /* boeConfig changes some boeSettings after resize event; also called once after boeInit, called from jQ ready */
 function boeConfig()
 { 
-		
-   setVideoFileGroup(); 
+
    if($.boeSettings.videoOpen)
 	     $.boeSettings.videoResize();
 	 $('.nav').myspasticNav();
@@ -326,28 +343,23 @@ function sizeButtonBannerPage()
 	       distanceToMoveLastButton= ($.boeSettings.accordionButtons.length-1)*($.boeSettings.buttonBottomMargin+$.boeSettings.buttonHeight)+($.boeSettings.topBannerHeight+$.boeSettings.initButtonOffset);      
 	   return (unusedWindow+distanceToMoveLastButton);
 }
+
+
 /*gives a video screen that fits according to 16/9 ratio returns an object with height and width */
-function videoDimensions(wH,wW)
- { 
- 	var aspectRatio=16/9,
-           inverseAspectRatio = 9/16,
-           sideSpace,
-           width=wW,height=wH,
+function videoDimensions(viewWidth,viewHeight)
+ { var aspectRatio=16/9,
+           inverseAspectRatio = 9/16,width,height,
            docWidth = $.boeSettings.doc.width();
-           if($.boeSettings.desktop)
-           {  width= wH * aspectRatio; 
-              if  ( (width + $.boeSettings.videoDesktopIconWidth) >  docWidth )
-              {   width = docWidth - $.boeSettings.videoDesktopIconWidth-20; /*20 for scroll bar */
-                  height = width * inverseAspectRatio;
-              }
-           }
-           else {  /* tablets just take the max width and work from there */
-                       height=width * inverseAspectRatio;
-                       if (wH < height)
-                       {     width = wH*aspectRatio;
-                            height=width * inverseAspectRatio; }
-                  }
-           return {"height":height,"width":width};        
+           if (viewWidth*inverseAspectRatio <= viewHeight)
+           {
+           	  width=viewWidth;
+           	  height=viewWidth*inverseAspectRatio;
+           } 
+          else {
+          	         width= viewHeight*aspectRatio; 
+          	         height= viewHeight;
+          	       }
+           return {"height":height,"width":width};    
  } 
  
  /* calculate how far button is from the "top"; used when deferred objects haven't yet updated on a closing content page, so promButtonDomReady polls 
@@ -855,8 +867,6 @@ function promScrollToMark($targ,adj)
 function promVideoOpen(d_lay)
 {
    var  delay = d_lay || 400;
-    var vt = new Date().getTime(); 
-    var gt;
   
      return $.Deferred(function(dfr)
      {  
@@ -887,7 +897,7 @@ function promVideoOpen(d_lay)
    	           		 	    	 { thePlayer.play();}
    	           		 	    	 else {   conBar.removeClass("vjs-lock-showing");
    	           		 	    	 	         conBar.addClass("vjs-fade-in");
-   	           		 	                     setTimeout(function(){conBar.addClass("vjs-fade-out");},100);
+   	           		 	                     setTimeout(function(){conBar.addClass("vjs-fade-out");},5000);
    	           		 	                 }
    	           		 	     }
    	            }            
@@ -906,7 +916,9 @@ function promVideoClose(d_lay)
     	/*thePlayer.pause();*/   thePlayer.src("");
         $(".vjs-play-control").removeClass("vjs-playing").addClass("vjs-paused");
     	$(".vjs-control-bar").addClass("vjs-lock-showing");
+  	    thePlayer.pause();
   	    promFadeHide($("#videocontainer"),dlay).then(function(){dfr.resolve();});
+  	    
   	    $.boeSettings.videoOpen=false;
   	    thePlayer.height(10).width(10);  
       }).promise();

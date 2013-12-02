@@ -282,7 +282,7 @@ section.banner  {
                                position:absolute;
                                z-index:500; width:100%;
                            }
-#my_video_player {margin:0 auto;}                           
+#my_video_player {margin:0 auto;top:4px;padding-top:0;}                           
                            
 .videoIconLeft {left:15px;top:180px;}                             
 .vt-columns {}
