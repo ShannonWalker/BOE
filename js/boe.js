@@ -86,27 +86,36 @@ $.fbLoaded = function(){ var fbInt = setInterval(function(){ var fbH,fbW;
  	$.boeSettings.videoResize = function(force)
 	 {                                                                           
 	 	 if (force || $.boeSettings.videoOpen)	
-	 	 {   
+	 	 {  
 		         var  topBorder=10,
 		                controlBar=30,
 		                width=$(window).width(),
+		                openWidth,
 		                height=$(window).height()-topBorder-controlBar,
 		                vidContainerTop = 0,
         	            vConHeight = (!!$.boeSettings.currentContent) ? $.boeSettings.currentContent.height():0,
         	            contentTop = $.boeSettings.currentContent.position().top,
         	            $currentButton=$(".accordionButton .current"), 
         	            padLeft=0;
+        	      
         	             if ($.boeSettings.screenWidth > 767)
         	                 height-=$.boeSettings.topBannerHeight;
-        	             width-=$.boeSettings.videoDesktopIconWidth-20; /* 20 for scroll */
+        	            
+        	             openWidth= width-$.boeSettings.videoDesktopIconWidth-20; /* 20 for scroll */
         	             if (!$.boeSettings.desktop)
-        	               contentTop-=$.boeSettings.buttonBottomMargin;
-        	             dims = videoDimensions(width,height);    
-        	             padLeft = Math.max($.boeSettings.videoDesktopIconWidth,($(window).width()-dims.width)/2); 
-        	             $("#videocontainer").height(vConHeight).css({"padding-left":padLeft+"px","width":width+"px","top":contentTop+"px"});
+        	             {  contentTop-=$.boeSettings.buttonBottomMargin;
+        	                vConHeight+=$.boeSettings.buttonBottomMargin;
+        	             }
+        	             dims = videoDimensions(openWidth,height);    
+        	             padLeft = Math.max($.boeSettings.videoDesktopIconWidth,(width-dims.width)/2);
+        	           
+        	             $("#videocontainer").height(vConHeight).css({"top":contentTop+"px","padding-left":padLeft+"px"});
         	             ($.boeSettings.myPlayer).height(dims.height).width( dims.width);
+        	         
         	             if ($.boeSettings.videoOpen && $.boeSettings.desktop)
-                        {  moveButtonToVideoPosition($currentButton); }
+                        {  
+                        	console.log("move button after size video");
+                        	moveButtonToVideoPosition($currentButton); }
             }  	 
     };      /*end video resize */                                   								
 	videojs("my_video_player").ready(function()
@@ -349,15 +358,15 @@ function sizeButtonBannerPage()
 function videoDimensions(viewWidth,viewHeight)
  { var aspectRatio=16/9,
            inverseAspectRatio = 9/16,width,height,
-           docWidth = $.boeSettings.doc.width();
+           docWidth = $.boeSettings.doc.width(); 
            if (viewWidth*inverseAspectRatio <= viewHeight)
            {
            	  width=viewWidth;
-           	  height=viewWidth*inverseAspectRatio;
+           	  height=viewWidth*inverseAspectRatio; 
            } 
           else {
           	         width= viewHeight*aspectRatio; 
-          	         height= viewHeight;
+          	         height= viewHeight;    
           	       }
            return {"height":height,"width":width};    
  } 
@@ -413,12 +422,11 @@ function hideTitlesForScroll()
 	$.boeSettings.topBannerHeader.addClass("showbg").fadeIn();
 	showButtons();
 }
-/*
- * scrollToMark takes elements position in the document and scrolls to the top of the document less an adjustment.
+
+/* scrollToMark takes elements position in the document and scrolls to the top of the document less an adjustment.
  * The adjustment is either a boeSetting, scrollToMarkAdjustment  which adjusts how an element ""slides up"  in a mobile environment or
  * @adjustment is a parameter indicating returning a button menu group to an offset, therefore when an "open"" button is closed the adjustment parameter
  * puts the button and the group it is in, back to the proper offset from the top of the document
- * 
  * scrollToMark is mostly called within a promScrollToMark wrapper that makes the scrolling an action of a deferred object so that the scrolling completes before  
  * subsequent actions are executed
  * Called in: initialization in JQ ready when the home banner is loaded [dektop version only]
@@ -457,7 +465,7 @@ if  ( ($target.attr("id")=="mytopButton") && !($.boeSettings.currentContent) )
         return;
 if ($target.hasClass("current"))
         return;
-if ($target.hasClass("accordionContent"));
+if ($target.hasClass("accordionContent"))
 {       
 	     $.boeSettings.nextPrefix = $target.attr("id").substr(0,3);     
          $.boeSettings.currentContent = $target;
@@ -507,7 +515,7 @@ function handleMenuIconRequest($target)
    			                                     	return promFadeShow($button);}
    			                                     	));
 }
-/* called from handleMenuRequest. will show content that is in $target (a section with class=accordionContent); 
+/* called from handleMenuRequest. will show content that is in $target (a section with class=accordionContent) 
  * @forceQuick boolean to close faster due to being called from content with video open (and therefore requring an extra step)
  *  here badge is a container for an icon and a title. The icon is either a video launch icon or a return to text (close video) icon 
  * 
@@ -517,7 +525,7 @@ function handleMenuIconRequest($target)
  *  if open content then p2 waits for it to fade to hide before showing target, else target shows immediately
  *  then mark target as current, acquire badge and wait for process to update DOM; then scroll to Mark ie scroll content to top of position under heading.
  *  finally with new content displayed mark badge as current and with deskshow class (for position) this fades icon badge into view (for calling video)
- *  */
+ */
 function showContentFromMenu($target,forceQuick)
 {
 	if ($target.hasClass("current"))  /* target is current accordionContent class element */

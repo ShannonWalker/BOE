@@ -6,6 +6,8 @@
  #aboutFilmBQ:after {height:43px;margin-top:-48px}     
  #ab-header {position:relative; width:55%;margin:0 7.303% 0 37.693%;   
                                             margin-top:20px; margin-bottom:60px;  }  
+ 
+                                            
 @media only screen and (min-width:1025px) 
 { /* this takes care of default to desktop like display for any tablet wider than 1024 css pixels */
 body {width:1025px; margin:0 auto;}
@@ -62,6 +64,7 @@ nav a.lightmenu  {color:#F0E4EC;}
 
 @media only screen and (max-width:1024px)
 {
+    #videocontainer {padding-top:1%}
     #page-filmtitle {display:none;}
     section.banner.home {height:108px;}
    .top-director   {padding-right:30px;text-align:right;margin-top:-32px}
@@ -112,7 +115,7 @@ nav a.lightmenu  {color:#F0E4EC;}
   #aboutFilmBQ:after {content: close-quote;margin-left: 95%;margin-top: -45px;height: 45px;}    
  
 #his-text   {width:40%;padding-top:60px;padding-bottom:40px} 
-#des-text  {width:40%;padding-top:60px;padding-bottom:65px;}
+#des-text  {width:41.5%;padding-top:60px;padding-bottom:65px;}
 #com-text {padding-top:400px;margin-bottom:22px}                        
 #com-text {background:rgba(19,19,19,0.6);
                    background:-webkit-linear-gradient(bottom, #2A2D27 0px,#2A2D27 300px,transparent 300px,transparent);

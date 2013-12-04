@@ -279,10 +279,13 @@ section.banner  {
 /* ***********************/
 #videocontainer {   
                                color:#ffee88;background-color:rgba(42,45,39,0.7);
+                             
                                position:absolute;
                                z-index:500; width:100%;
+                               -moz-box-sizing:border-box;
+                               box-sizing:border-box;
                            }
-#my_video_player {margin:0 auto;top:4px;padding-top:0;}                           
+#my_video_player {margin:0 auto;top:4px;padding:0 auto;}                           
                            
 .videoIconLeft {left:15px;top:180px;}                             
 .vt-columns {}
